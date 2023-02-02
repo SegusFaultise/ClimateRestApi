@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 #endregion
@@ -15,6 +16,7 @@ namespace CLIMATE_REST_API.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
+        [DefaultValue("")]
         public string? Id { get; set; }
 
         [BsonElement("Device Name")]

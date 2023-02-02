@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using CLIMATE_REST_API.Services;
 using CLIMATE_REST_API.Models;
+using System.Globalization;
+using MongoDB.Bson;
 #endregion
 
 namespace CLIMATE_DATA_BRAZIL.Controllers
@@ -33,12 +35,21 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         }
         #endregion
 
+        #region Http Get A Weather Device
+        [HttpGet]
+        [Route("GetWeatherDevice")]
+        public async Task<SensorDataModel> GetWeatherDevice(string device)
+        {
+            return await _mongodbServices.GetDeviceNameAsync(device);
+        }
+        #endregion
+
         #region Http Post Weather
         [HttpPost]
-        public async Task<IActionResult> PostWeather(SensorDataModel weatherModel)
+        public async Task<IActionResult> PostWeather([FromBody]SensorDataModel weatherModel)
         {
             await _mongodbServices.CreateWeatherAsync(weatherModel);
-            return CreatedAtAction(nameof(GetWeather), new { id = weatherModel.Id }, weatherModel);
+            return CreatedAtAction(nameof(GetWeather), new { id = weatherModel.Id}, weatherModel);
         }
         #endregion
     }
