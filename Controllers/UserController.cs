@@ -24,7 +24,7 @@ namespace CLIMATE_REST_API.Controllers
         }
         #endregion
 
-        #region Http Get Weather
+        #region Http Get Users
         [HttpGet]
         public async Task<List<UserModel>> GetAllUsers()
         {

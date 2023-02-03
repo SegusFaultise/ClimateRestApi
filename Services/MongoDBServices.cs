@@ -6,6 +6,9 @@ using Microsoft.Extensions.Options;
 using CLIMATE_REST_API.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
+using CLIMATE_DATA_BRAZIL.Controllers;
+using ZstdSharp.Unsafe;
+using System.Web.Http.Filters;
 #endregion
 
 namespace CLIMATE_REST_API.Services
@@ -39,22 +42,42 @@ namespace CLIMATE_REST_API.Services
             return await _weatherCollection.Find(filter).FirstAsync();
         }
 
-        //#region Get Maximum Precipitation Aysnc
-        //public async Task<SensorDataModel> GetMaximumPrecipitaionAsync(string device, int time)
-        //{
-        //    var months = time < 5;
-        //    var device_filter = Builders<SensorDataModel>.Filter.Eq("Device Name", device);
-        //    return await _weatherCollection.Find(filter).FirstAsync();
-        //}
-        //#endregion
+        #region Get Maximum Precipitation Aysnc
+        public async Task<List<SensorDataModel>> GetMaximumPrecipitaionAsync(string device)
+        {
+            var builders = Builders<SensorDataModel>.Filter;
+            SensorDataModel sensor_data_model = new SensorDataModel();
+            double? precip = sensor_data_model.Precipitation_mm_h;
+
+            var filter1 = Builders<SensorDataModel>.Filter.Eq("Device Name", device);
+            var filter2 = Builders<SensorDataModel>.Filter.Eq("Precipitation mm/h", 0.00);
+            var FilterAnd = builders.And(filter1, filter2);
+
+            var projectStage = Builders<SensorDataModel>.Projection.Expression(u =>
+                new
+                {
+                    Device = u.Device,
+                    Precipitation_mm_h = u.Precipitation_mm_h,
+                    Time = u.Time
+                });
+
+            return await _weatherCollection.Find(FilterAnd).Limit(10).ToListAsync();
+
+        }
+        #endregion
 
         public async Task CreateWeatherAsync(SensorDataModel weather)
         {
-            //var filter = Builders<SensorDataModel>.Filter.Eq("Device Name", device);
-            //await _weatherCollection.Find(filter).FirstAsync();
             await _weatherCollection.InsertOneAsync(weather);
             return;
         }
+
+        //public async Task<List<SensorDataModel>> CreateMultiWeatherAsync(SensorDataModel weather)
+        //{
+        //    await _weatherCollection.BulkWriteAsync().;
+        //    return;
+        //}
+        //#endregion
         #endregion
 
         #region User Aysnc Methods

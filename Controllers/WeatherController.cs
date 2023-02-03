@@ -2,8 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CLIMATE_REST_API.Services;
 using CLIMATE_REST_API.Models;
-using System.Globalization;
-using MongoDB.Bson;
+using Microsoft.AspNetCore.Cors;
 #endregion
 
 namespace CLIMATE_DATA_BRAZIL.Controllers
@@ -28,6 +27,7 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         #endregion
 
         #region Http Get Weather
+        [EnableCors]
         [HttpGet]
         public async Task<List<SensorDataModel>> GetWeather()
         {
@@ -37,10 +37,10 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
 
         #region Http Get A Weather Device
         [HttpGet]
-        [Route("GetWeatherDevice")]
-        public async Task<SensorDataModel> GetWeatherDevice(string device)
+        [Route("GetMaxPrecipitation")]
+        public async Task<List<SensorDataModel>> GetWeatherDevice(string device)
         {
-            return await _mongodbServices.GetDeviceNameAsync(device);
+            return await _mongodbServices.GetMaximumPrecipitaionAsync(device);
         }
         #endregion
 
@@ -52,6 +52,16 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
             return CreatedAtAction(nameof(GetWeather), new { id = weatherModel.Id}, weatherModel);
         }
         #endregion
+
+        //#region Http Post Multi Weather
+        //[HttpPost]
+        //[Route("PostMultiWeather")]
+        //public async Task<IActionResult> PostMultiWeather([FromBody] SensorDataModel weatherModel)
+        //{
+        //    await _mongodbServices.CreateMultiWeatherAsync(weatherModel);
+        //    return CreatedAtAction(nameof(GetWeather), new { id = weatherModel.Id }, weatherModel);
+        //}
+        //#endregion
     }
     #endregion
 }
