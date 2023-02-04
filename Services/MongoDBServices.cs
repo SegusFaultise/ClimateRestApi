@@ -47,7 +47,7 @@ namespace CLIMATE_REST_API.Services
         {
             var builders = Builders<SensorDataModel>.Filter;
             SensorDataModel sensor_data_model = new SensorDataModel();
-            double? precip = sensor_data_model.Precipitation_mm_h;
+            var precip = sensor_data_model.Precipitation_mm_h;
 
             var filter1 = Builders<SensorDataModel>.Filter.Eq("Device Name", device);
             var filter2 = Builders<SensorDataModel>.Filter.Eq("Precipitation mm/h", 0.00);
@@ -61,7 +61,9 @@ namespace CLIMATE_REST_API.Services
                     Time = u.Time
                 });
 
-            return await _weatherCollection.Find(FilterAnd).Limit(10).ToListAsync();
+            var aggregate = _weatherCollection.Aggregate().Project(projectStage);
+
+            return await _weatherCollection.Find(FilterAnd).ForEachAsync(precip).Limit(10).ToListAsync();
 
         }
         #endregion
