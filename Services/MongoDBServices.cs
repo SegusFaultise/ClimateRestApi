@@ -43,27 +43,27 @@ namespace CLIMATE_REST_API.Services
         }
 
         #region Get Maximum Precipitation Aysnc
-        public async Task<List<SensorDataModel>> GetMaximumPrecipitaionAsync(string device)
+        public async Task<IResult> GetMaximumPrecipitaionAsync(string device)
         {
             var builders = Builders<SensorDataModel>.Filter;
             SensorDataModel sensor_data_model = new SensorDataModel();
-            var precip = sensor_data_model.Precipitation_mm_h;
 
             var filter1 = Builders<SensorDataModel>.Filter.Eq("Device Name", device);
-            var filter2 = Builders<SensorDataModel>.Filter.Eq("Precipitation mm/h", 0.00);
-            var FilterAnd = builders.And(filter1, filter2);
+            //var filter2 = Builders<SensorDataModel>.Filter.Where(u => u.Precipitation_mm_h.Value);
+            //var FilterAnd = builders.And(filter1, filter2);
 
             var projectStage = Builders<SensorDataModel>.Projection.Expression(u =>
                 new
                 {
                     Device = u.Device,
                     Precipitation_mm_h = u.Precipitation_mm_h,
-                    Time = u.Time
+                    TimeProject = u.Time
                 });
 
-            var aggregate = _weatherCollection.Aggregate().Project(projectStage);
+            await  _weatherCollection.Aggregate().Match(filter1).SortByDescending(u => u.Precipitation_mm_h).Project(projectStage).FirstAsync();
+            return Results.Ok();
 
-            return await _weatherCollection.Find(FilterAnd).ForEachAsync(precip).Limit(10).ToListAsync();
+            //return await _weatherCollection.Project(projectStage).FirstAsync();
 
         }
         #endregion

@@ -36,15 +36,18 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         #endregion
 
         #region Http Get A Weather Device
+        [EnableCors]
         [HttpGet]
         [Route("GetMaxPrecipitation")]
-        public async Task<List<SensorDataModel>> GetWeatherDevice(string device)
+        public async Task<IResult> GetWeatherDevice(string device)
         {
-            return await _mongodbServices.GetMaximumPrecipitaionAsync(device);
+            await _mongodbServices.GetMaximumPrecipitaionAsync(device);
+            return Results.Ok();
         }
         #endregion
 
         #region Http Post Weather
+        [EnableCors]
         [HttpPost]
         public async Task<IActionResult> PostWeather([FromBody]SensorDataModel weatherModel)
         {
