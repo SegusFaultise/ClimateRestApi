@@ -4,6 +4,7 @@ using CLIMATE_REST_API.Services;
 using CLIMATE_REST_API.Models;
 using Microsoft.AspNetCore.Cors;
 using MongoDB.Bson;
+using Newtonsoft.Json.Linq;
 #endregion
 
 namespace CLIMATE_DATA_BRAZIL.Controllers
@@ -42,8 +43,8 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         [Route("GetMaxPrecipitation")]
         public async Task<IResult> GetMaxPrecipitation(string device)
         {
-           var result = await _mongodbServices.GetMaxPrecipitaionAsync(device);
-            return Results.Text(result);
+            var result = await _mongodbServices.GetMaxPrecipitaionAsync(device);
+            return Results.Json(result);
         }
         #endregion
 

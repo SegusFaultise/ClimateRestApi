@@ -10,6 +10,8 @@ using CLIMATE_DATA_BRAZIL.Controllers;
 using ZstdSharp.Unsafe;
 using System.Web.Http.Filters;
 using System.Collections;
+using System.Text.Json;
+using Newtonsoft.Json.Linq;
 #endregion
 
 namespace CLIMATE_REST_API.Services
@@ -46,7 +48,6 @@ namespace CLIMATE_REST_API.Services
             return await _weatherCollection.Find(filter).FirstAsync();
         }
 
-        #region Get Maximum Precipitation Aysnc
         public async Task<string> GetMaxPrecipitaionAsync(string device)
         {
             var device_filter = Builders<SensorDataModel>.Filter.Eq("Device Name", device);
@@ -63,9 +64,7 @@ namespace CLIMATE_REST_API.Services
             var w = await  _weatherCollection.Aggregate().Match(device_filter).Match(time_filter).SortByDescending(u => u.Precipitation_mm_h).Project(project_stage).FirstAsync();
             return w.ToJson();
         }
-        #endregion
 
-        #region Get Fields Based On Time & Date Aysnc
         public async Task<string> GetFieldsBasedOnTimeAndDateAsync(string device, DateTime date_time)
         {
             var device_filter = Builders<SensorDataModel>.Filter.Eq("Device Name", device);
@@ -85,9 +84,7 @@ namespace CLIMATE_REST_API.Services
             var w = await _weatherCollection.Aggregate().Match(time_filter).Match(device_filter).Project(projectStage).FirstAsync();
             return w.ToJson();
         }
-        #endregion
-
-        #region Get Max Tempreture Aysnc
+        
         public async Task<string> GetMaxTempAsync(DateTime date_time_start, DateTime date_time_end)
         {
             var time_filter_start = Builders<SensorDataModel>.Filter.Gt("Time", date_time_start);
@@ -104,7 +101,6 @@ namespace CLIMATE_REST_API.Services
             var result = await _weatherCollection.Aggregate().Match(time_filter_start).SortByDescending(u => u.Temperature_C).Project(projectStage).ToListAsync();
             return result.ToJson();
         }
-        #endregion
 
         public async Task CreateWeatherAsync(SensorDataModel weather)
         {
