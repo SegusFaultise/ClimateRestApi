@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using CLIMATE_REST_API.Services;
 using CLIMATE_REST_API.Models;
 using Microsoft.AspNetCore.Cors;
+using MongoDB.Bson;
 #endregion
 
 namespace CLIMATE_DATA_BRAZIL.Controllers
@@ -35,14 +36,36 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         }
         #endregion
 
-        #region Http Get A Weather Device
+        #region Http Get Max Precipitation
         [EnableCors]
         [HttpGet]
         [Route("GetMaxPrecipitation")]
-        public async Task<IResult> GetWeatherDevice(string device)
+        public async Task<IResult> GetMaxPrecipitation(string device)
         {
-            await _mongodbServices.GetMaximumPrecipitaionAsync(device);
-            return Results.Ok();
+           var result = await _mongodbServices.GetMaxPrecipitaionAsync(device);
+            return Results.Text(result);
+        }
+        #endregion
+
+        #region Http Get Fields Based On Time & Date Aysnc
+        [EnableCors]
+        [HttpGet]
+        [Route("GetFieldsBasedOnTimeAndDate")]
+        public async Task<IResult> GetFieldsBasedOnTimeAndDate(string device, DateTime date_time)
+        {
+            var result = await _mongodbServices.GetFieldsBasedOnTimeAndDateAsync(device, date_time);
+            return Results.Text(result);
+        }
+        #endregion
+
+        #region Http Get Max Tempreture Aysnc
+        [EnableCors]
+        [HttpGet]
+        [Route("GetMaxTemp")]
+        public async Task<IResult> GetMaxTemp(DateTime date_time_start, DateTime date_time_end)
+        {
+            var result = await _mongodbServices.GetMaxTempAsync(date_time_start, date_time_end);
+            return Results.Ok(result);
         }
         #endregion
 

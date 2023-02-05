@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using CLIMATE_DATA_BRAZIL.Controllers;
 using ZstdSharp.Unsafe;
 using System.Web.Http.Filters;
+using System.Collections;
 #endregion
 
 namespace CLIMATE_REST_API.Services
@@ -43,28 +44,62 @@ namespace CLIMATE_REST_API.Services
         }
 
         #region Get Maximum Precipitation Aysnc
-        public async Task<IResult> GetMaximumPrecipitaionAsync(string device)
+        public async Task<string> GetMaxPrecipitaionAsync(string device)
         {
-            var builders = Builders<SensorDataModel>.Filter;
-            SensorDataModel sensor_data_model = new SensorDataModel();
+            var device_filter = Builders<SensorDataModel>.Filter.Eq("Device Name", device);
+            var time_filter = Builders<SensorDataModel>.Filter.Lt("Time", DateTime.Now.AddMonths(-5));
 
-            var filter1 = Builders<SensorDataModel>.Filter.Eq("Device Name", device);
-            //var filter2 = Builders<SensorDataModel>.Filter.Where(u => u.Precipitation_mm_h.Value);
-            //var FilterAnd = builders.And(filter1, filter2);
+            var project_stage = Builders<SensorDataModel>.Projection.Expression(u =>
+                new
+                {
+                    Device = u.Device,
+                    Precipitation_mm_h = u.Precipitation_mm_h,
+                    Time = u.Time
+                });
+
+            var w = await  _weatherCollection.Aggregate().Match(device_filter).Match(time_filter).SortByDescending(u => u.Precipitation_mm_h).Project(project_stage).FirstAsync();
+            return w.ToJson();
+        }
+        #endregion
+
+        #region Get Fields Based On Time & Date Aysnc
+        public async Task<string> GetFieldsBasedOnTimeAndDateAsync(string device, DateTime date_time)
+        {
+            var device_filter = Builders<SensorDataModel>.Filter.Eq("Device Name", device);
+            var time_filter = Builders<SensorDataModel>.Filter.Eq("Time", date_time);
 
             var projectStage = Builders<SensorDataModel>.Projection.Expression(u =>
                 new
                 {
                     Device = u.Device,
                     Precipitation_mm_h = u.Precipitation_mm_h,
-                    TimeProject = u.Time
+                    Time = u.Time,
+                    AtmosphericPressure_kPa = u.AtmosphericPressure_kPa,
+                    Temperature_C = u.Temperature_C,
+                    SolarRadiation_Wm2 = u.SolarRadiation_Wm2
                 });
 
-            await  _weatherCollection.Aggregate().Match(filter1).SortByDescending(u => u.Precipitation_mm_h).Project(projectStage).FirstAsync();
-            return Results.Ok();
+            var w = await _weatherCollection.Aggregate().Match(time_filter).Match(device_filter).Project(projectStage).FirstAsync();
+            return w.ToJson();
+        }
+        #endregion
 
-            //return await _weatherCollection.Project(projectStage).FirstAsync();
+        #region Get Max Tempreture Aysnc
+        public async Task<string> GetMaxTempAsync(DateTime date_time_start, DateTime date_time_end)
+        {
+            var time_filter_start = Builders<SensorDataModel>.Filter.Gt("Time", date_time_start);
+            var time_filter_end = Builders<SensorDataModel>.Filter.Lt("Time", date_time_end);
 
+            var projectStage = Builders<SensorDataModel>.Projection.Expression(u =>
+                new
+                {
+                    Device = u.Device,
+                    Time = u.Time,
+                    Temperature_C = u.Temperature_C,
+                });
+
+            var result = await _weatherCollection.Aggregate().Match(time_filter_start).SortByDescending(u => u.Temperature_C).Project(projectStage).ToListAsync();
+            return result.ToJson();
         }
         #endregion
 
@@ -74,12 +109,6 @@ namespace CLIMATE_REST_API.Services
             return;
         }
 
-        //public async Task<List<SensorDataModel>> CreateMultiWeatherAsync(SensorDataModel weather)
-        //{
-        //    await _weatherCollection.BulkWriteAsync().;
-        //    return;
-        //}
-        //#endregion
         #endregion
 
         #region User Aysnc Methods
