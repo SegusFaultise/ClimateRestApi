@@ -31,6 +31,7 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         #region Http Get Weather
         [EnableCors]
         [HttpGet]
+        [Route("GetAllSesnors")]
         public async Task<List<SensorDataModel>> GetWeather()
         {
             return await _mongodbServices.GetWeatherAsync();
@@ -49,7 +50,7 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         #endregion
 
         #region Http Get Fields Based On Time & Date Aysnc
-        [EnableCors]
+        [EnableCors("{}")]
         [HttpGet]
         [Route("GetFieldsBasedOnTimeAndDate")]
         public async Task<IResult> GetFieldsBasedOnTimeAndDate(string device, DateTime date_time)
@@ -73,10 +74,20 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         #region Http Post Weather
         [EnableCors]
         [HttpPost]
-        public async Task<IActionResult> PostWeather([FromBody]SensorDataModel weatherModel)
+        public async Task<IActionResult> PostWeatherAsync([FromBody]SensorDataModel weatherModel)
         {
             await _mongodbServices.CreateWeatherAsync(weatherModel);
             return CreatedAtAction(nameof(GetWeather), new { id = weatherModel.Id}, weatherModel);
+        }
+        #endregion
+
+        #region Http Put Weather (Precipitation mm/h)
+        [EnableCors]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdatePrecipitationAsync(string id, double precipitation_mm_h)
+        {
+            await _mongodbServices.UpdatePrecipitaionAsync(id, precipitation_mm_h);
+            return CreatedAtAction(nameof(GetWeather), new { id }, precipitation_mm_h);
         }
         #endregion
 

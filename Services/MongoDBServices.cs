@@ -108,12 +108,28 @@ namespace CLIMATE_REST_API.Services
             return;
         }
 
+        public async Task UpdatePrecipitaionAsync(string id, double precipitation_mm_h)
+        {
+            FilterDefinition<SensorDataModel> filter = Builders<SensorDataModel>.Filter.Eq("Id", id);
+            UpdateDefinition<SensorDataModel> update = Builders<SensorDataModel>.Update.Set("Precipitation mm/h", precipitation_mm_h);
+
+            await _weatherCollection.UpdateOneAsync(filter, update);
+            return;
+        }
+
         #endregion
 
         #region User Aysnc Methods
         public async Task<List<UserModel>> GetUserAsync()
         {
             return await _userCollection.Find(new BsonDocument()).Limit(10).ToListAsync();
+        }
+
+        public async Task DeleteUserByIdAsync(string id)
+        {
+            FilterDefinition<UserModel> filter = Builders<UserModel>.Filter.Eq("Id", id);
+            await _userCollection.DeleteOneAsync(filter);
+            return;
         }
         #endregion
 

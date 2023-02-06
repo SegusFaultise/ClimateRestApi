@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\wilso\\Source\\Repos\\NeuralNuts\\CLIMATE-REST-API\\CLIMATE-REST-API.csproj": {}
+    "C:\\Users\\wilso\\source\\repos\\NeuralNuts\\CLIMATE-REST-API\\CLIMATE-REST-API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\wilso\\Source\\Repos\\NeuralNuts\\CLIMATE-REST-API\\CLIMATE-REST-API.csproj": {
+    "C:\\Users\\wilso\\source\\repos\\NeuralNuts\\CLIMATE-REST-API\\CLIMATE-REST-API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\wilso\\Source\\Repos\\NeuralNuts\\CLIMATE-REST-API\\CLIMATE-REST-API.csproj",
+        "projectUniqueName": "C:\\Users\\wilso\\source\\repos\\NeuralNuts\\CLIMATE-REST-API\\CLIMATE-REST-API.csproj",
         "projectName": "CLIMATE-REST-API",
-        "projectPath": "C:\\Users\\wilso\\Source\\Repos\\NeuralNuts\\CLIMATE-REST-API\\CLIMATE-REST-API.csproj",
+        "projectPath": "C:\\Users\\wilso\\source\\repos\\NeuralNuts\\CLIMATE-REST-API\\CLIMATE-REST-API.csproj",
         "packagesPath": "C:\\Users\\wilso\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\wilso\\Source\\Repos\\NeuralNuts\\CLIMATE-REST-API\\obj\\",
+        "outputPath": "C:\\Users\\wilso\\source\\repos\\NeuralNuts\\CLIMATE-REST-API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -45,9 +45,17 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "AspNetCore.Identity.Mongo": {
+              "target": "Package",
+              "version": "[8.3.3, )"
+            },
             "Microsoft.AspNet.WebApi.Cors": {
               "target": "Package",
               "version": "[5.2.9, )"
+            },
+            "Microsoft.AspNetCore.Authentication": {
+              "target": "Package",
+              "version": "[2.2.0, )"
             },
             "MongoDB.Bson": {
               "target": "Package",
@@ -64,6 +72,10 @@
             "Swashbuckle.AspNetCore.Swagger": {
               "target": "Package",
               "version": "[6.5.0, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[6.26.0, )"
             }
           },
           "imports": [

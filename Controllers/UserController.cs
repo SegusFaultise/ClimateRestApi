@@ -33,6 +33,16 @@ namespace CLIMATE_REST_API.Controllers
             return await _mongodbServices.GetUserAsync();
         }
         #endregion
+
+        #region Http Delete User By Id
+        [EnableCors]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> SeleteUserById(string id)
+        {
+            await _mongodbServices.DeleteUserByIdAsync(id);
+            return NoContent();
+        }
+        #endregion
     }
     #endregion
 }
