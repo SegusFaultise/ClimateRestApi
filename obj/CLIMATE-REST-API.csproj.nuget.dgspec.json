@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\wilso\\source\\repos\\NeuralNuts\\CLIMATE-REST-API\\CLIMATE-REST-API.csproj": {}
+    "C:\\Users\\wilso\\Source\\Repos\\NeuralNuts\\CLIMATE-REST-API\\CLIMATE-REST-API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\wilso\\source\\repos\\NeuralNuts\\CLIMATE-REST-API\\CLIMATE-REST-API.csproj": {
+    "C:\\Users\\wilso\\Source\\Repos\\NeuralNuts\\CLIMATE-REST-API\\CLIMATE-REST-API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\wilso\\source\\repos\\NeuralNuts\\CLIMATE-REST-API\\CLIMATE-REST-API.csproj",
+        "projectUniqueName": "C:\\Users\\wilso\\Source\\Repos\\NeuralNuts\\CLIMATE-REST-API\\CLIMATE-REST-API.csproj",
         "projectName": "CLIMATE-REST-API",
-        "projectPath": "C:\\Users\\wilso\\source\\repos\\NeuralNuts\\CLIMATE-REST-API\\CLIMATE-REST-API.csproj",
+        "projectPath": "C:\\Users\\wilso\\Source\\Repos\\NeuralNuts\\CLIMATE-REST-API\\CLIMATE-REST-API.csproj",
         "packagesPath": "C:\\Users\\wilso\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\wilso\\source\\repos\\NeuralNuts\\CLIMATE-REST-API\\obj\\",
+        "outputPath": "C:\\Users\\wilso\\Source\\Repos\\NeuralNuts\\CLIMATE-REST-API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
