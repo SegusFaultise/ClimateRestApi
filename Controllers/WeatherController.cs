@@ -81,6 +81,17 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         }
         #endregion
 
+        #region Http Post Weather
+        [EnableCors]
+        [HttpPost]
+        [Route("PostWeatherToWebsite")]
+        public async Task<IActionResult> PostWeatherToWebisteAsync(SensorDataModel weatherModel)
+        {
+            await _mongodbServices.CreateWeatherAsync(weatherModel);
+            return CreatedAtAction(nameof(GetWeather), new { id = weatherModel.Id }, weatherModel);
+        }
+        #endregion
+
         #region Http Put Weather (Precipitation mm/h)
         [EnableCors]
         [HttpPut("{id}")]
