@@ -5,6 +5,7 @@ using CLIMATE_REST_API.Models;
 using Microsoft.AspNetCore.Cors;
 using MongoDB.Bson;
 using Newtonsoft.Json.Linq;
+using System;
 #endregion
 
 namespace CLIMATE_DATA_BRAZIL.Controllers
@@ -42,10 +43,25 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         [EnableCors]
         [HttpGet]
         [Route("GetMaxPrecipitation")]
-        public async Task<IResult> GetMaxPrecipitation(string device)
+        public async Task<IActionResult> GetMaxPrecipitation(string device)
         {
-            var result = await _mongodbServices.GetMaxPrecipitaionAsync(device);
-            return Results.Json(result);
+            try
+            {
+                var result = await _mongodbServices.GetMaxPrecipitaionAsync(device);
+
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return Problem(statusCode: 500);
+                }
+            }
+            catch
+            {
+                return BadRequest("No entry found");
+            }
         }
         #endregion
 
@@ -53,10 +69,25 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         [EnableCors("{}")]
         [HttpGet]
         [Route("GetFieldsBasedOnTimeAndDate")]
-        public async Task<IResult> GetFieldsBasedOnTimeAndDate(string device, DateTime date_time)
+        public async Task<IActionResult> GetFieldsBasedOnTimeAndDate(string device, DateTime date_time)
         {
-            var result = await _mongodbServices.GetFieldsBasedOnTimeAndDateAsync(device, date_time);
-            return Results.Text(result);
+            try
+            {
+                var result = await _mongodbServices.GetFieldsBasedOnTimeAndDateAsync(device, date_time);
+
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return Problem(statusCode: 500);
+                }
+            }
+            catch
+            {
+                return BadRequest("No entry found");
+            }
         }
         #endregion
 
@@ -64,10 +95,25 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         [EnableCors]
         [HttpGet]
         [Route("GetMaxTemp")]
-        public async Task<IResult> GetMaxTemp(DateTime date_time_start, DateTime date_time_end)
+        public async Task<IActionResult> GetMaxTemp(DateTime date_time_start, DateTime date_time_end)
         {
-            var result = await _mongodbServices.GetMaxTempAsync(date_time_start, date_time_end);
-            return Results.Ok(result);
+            try
+            {
+                var result = await _mongodbServices.GetMaxTempAsync(date_time_start, date_time_end);
+
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return Problem(statusCode: 500);
+                }
+            }
+            catch
+            {
+                return BadRequest("No entry found");
+            }
         }
         #endregion
 
@@ -76,8 +122,15 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         [HttpPost]
         public async Task<IActionResult> PostWeatherAsync([FromBody]SensorDataModel weatherModel)
         {
-            await _mongodbServices.CreateWeatherAsync(weatherModel);
-            return CreatedAtAction(nameof(GetWeather), new { id = weatherModel.Id}, weatherModel);
+            try
+            {
+                await _mongodbServices.CreateWeatherAsync(weatherModel);
+                return CreatedAtAction(nameof(GetWeather), new { id = weatherModel.Id }, weatherModel);
+            }
+            catch
+            {
+                return BadRequest("Incorect details");
+            }
         }
         #endregion
 
@@ -97,20 +150,22 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePrecipitationAsync(string id, double precipitation_mm_h)
         {
-            await _mongodbServices.UpdatePrecipitaionAsync(id, precipitation_mm_h);
-            return CreatedAtAction(nameof(GetWeather), new { id }, precipitation_mm_h);
+            try
+            {
+                if (precipitation_mm_h != 0)
+                {
+                    await _mongodbServices.UpdatePrecipitaionAsync(id, precipitation_mm_h);
+                    return CreatedAtAction(nameof(GetWeather), "Precipitation updated");
+                }
+
+                return CreatedAtAction(nameof(GetWeather), "You must enter a value into the [precipitation] field");
+            }
+            catch
+            {
+                return BadRequest("Incorect details");
+            }
         }
         #endregion
-
-        //#region Http Post Multi Weather
-        //[HttpPost]
-        //[Route("PostMultiWeather")]
-        //public async Task<IActionResult> PostMultiWeather([FromBody] SensorDataModel weatherModel)
-        //{
-        //    await _mongodbServices.CreateMultiWeatherAsync(weatherModel);
-        //    return CreatedAtAction(nameof(GetWeather), new { id = weatherModel.Id }, weatherModel);
-        //}
-        //#endregion
     }
     #endregion
 }
