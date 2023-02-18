@@ -189,7 +189,7 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
 
         #region Http Put Weather (Precipitation mm/h)
         /// <summary>
-        /// Updates Precipitation Based On Device Name
+        /// Updates Precipitation Based On Id
         /// </summary>
         /// <returns></returns>
         [EnableCors]

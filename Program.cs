@@ -22,7 +22,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Version = "v1",
+        Version = "v1.0",
         Title= "Sensor Data API",
         Description = "An edcucational api for interfacing with sensor data from IOT devices."
     });

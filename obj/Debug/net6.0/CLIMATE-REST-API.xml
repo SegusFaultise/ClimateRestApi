@@ -42,7 +42,7 @@
         </member>
         <member name="M:CLIMATE_DATA_BRAZIL.Controllers.WeatherController.UpdatePrecipitationAsync(System.String,System.Double)">
             <summary>
-            Updates Precipitation Based On Device Name
+            Updates Precipitation Based On Id
             </summary>
             <returns></returns>
         </member>
