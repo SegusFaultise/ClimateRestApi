@@ -134,6 +134,24 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         }
         #endregion
 
+        #region Http Post Manny Weather
+        [EnableCors]
+        [HttpPost]
+        [Route("PostMannyWeather")]
+        public ActionResult PostMannyWeatherAsync([FromBody] List<SensorDataModel> weatherModel)
+        {
+            try
+            {
+                _mongodbServices.CreateMannyWeatherAsync(weatherModel);
+                return CreatedAtAction(nameof(GetWeather), new { id = weatherModel }, weatherModel);
+            }
+            catch
+            {
+                return BadRequest("Incorect details");
+            }
+        }
+        #endregion
+
         #region Http Post Weather
         [EnableCors]
         [HttpPost]

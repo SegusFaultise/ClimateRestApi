@@ -108,6 +108,12 @@ namespace CLIMATE_REST_API.Services
             return;
         }
 
+        public void CreateMannyWeatherAsync(List<SensorDataModel> weather)
+        {
+            _weatherCollection.InsertMany(weather);
+            return;
+        }
+
         public async Task UpdatePrecipitaionAsync(string id, double precipitation_mm_h)
         {
             FilterDefinition<SensorDataModel> filter = Builders<SensorDataModel>.Filter.Eq("Id", id);
