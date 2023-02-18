@@ -1,10 +1,12 @@
 #region Imports
 using CLIMATE_REST_API.Models;
 using CLIMATE_REST_API.Services;
+using Microsoft.OpenApi.Models;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 #endregion
 
 #region Instanciate {builder} Variable From WebApplication Class
@@ -16,7 +18,19 @@ builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("Mo
 builder.Services.AddSingleton<MongoDBServices>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title= "Sensor Data API",
+        Description = "An edcucational api for interfacing with sensor data from IOT devices."
+    });
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
 
 #endregion
 

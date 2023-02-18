@@ -56,3 +56,5 @@ C:\Users\wilso\source\repos\NeuralNuts\CLIMATE-REST-API\bin\Debug\net6.0\Microso
 C:\Users\wilso\source\repos\NeuralNuts\CLIMATE-REST-API\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\wilso\source\repos\NeuralNuts\CLIMATE-REST-API\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\wilso\source\repos\NeuralNuts\CLIMATE-REST-API\bin\Debug\net6.0\System.Security.Permissions.dll
+C:\Users\wilso\Source\Repos\NeuralNuts\CLIMATE-REST-API\bin\Debug\net6.0\CLIMATE-REST-API.xml
+C:\Users\wilso\Source\Repos\NeuralNuts\CLIMATE-REST-API\obj\Debug\net6.0\CLIMATE-REST-API.xml

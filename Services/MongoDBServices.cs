@@ -61,7 +61,7 @@ namespace CLIMATE_REST_API.Services
                     Time = u.Time
                 });
 
-            var w = await  _weatherCollection.Aggregate().Match(device_filter).Match(time_filter).SortByDescending(u => u.Precipitation_mm_h).Project(project_stage).FirstAsync();
+            var w = await _weatherCollection.Aggregate().Match(device_filter).Match(time_filter).SortByDescending(u => u.Precipitation_mm_h).Project(project_stage).FirstAsync();
             return w.ToJson();
         }
 
@@ -84,7 +84,7 @@ namespace CLIMATE_REST_API.Services
             var w = await _weatherCollection.Aggregate().Match(time_filter).Match(device_filter).Project(projectStage).FirstAsync();
             return w.ToJson();
         }
-        
+
         public async Task<string> GetMaxTempAsync(DateTime date_time_start, DateTime date_time_end)
         {
             var time_filter_start = Builders<SensorDataModel>.Filter.Gt("Time", date_time_start);
@@ -109,7 +109,8 @@ namespace CLIMATE_REST_API.Services
         }
 
         public void CreateMannyWeatherAsync(List<SensorDataModel> weather)
-        {
+        { 
+
             _weatherCollection.InsertMany(weather);
             return;
         }

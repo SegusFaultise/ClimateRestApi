@@ -30,6 +30,10 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         #endregion
 
         #region Http Get Weather
+        /// <summary>
+        /// Gets all sensor readings
+        /// </summary>
+        /// <returns></returns>
         [EnableCors]
         [HttpGet]
         [Route("GetAllSesnors")]

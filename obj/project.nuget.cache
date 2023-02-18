@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "hzmMO0bxgK7C7fEQxMn6L84obWu1KV0vExHZL8M18KUOnccRcubeKhY3RpdTDgIXOO7Hm8LJJM+yiHcJ0fXMrg==",
+  "dgSpecHash": "fMch8PnN1MXRMs5IE/zh3Gb/DlPzdEOoApAkEDRIjI+/UIi4DnRXUTHaSEyEhyZj8+MZKSmCMStLgrQDBkgV0Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\wilso\\Source\\Repos\\NeuralNuts\\CLIMATE-REST-API\\CLIMATE-REST-API.csproj",
   "expectedPackageFiles": [
@@ -26,7 +26,7 @@
     "C:\\Users\\wilso\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.2.0\\microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512",
     "C:\\Users\\wilso\\.nuget\\packages\\microsoft.aspnetcore.webutilities\\2.2.0\\microsoft.aspnetcore.webutilities.2.2.0.nupkg.sha512",
     "C:\\Users\\wilso\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
-    "C:\\Users\\wilso\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "C:\\Users\\wilso\\.nuget\\packages\\microsoft.extensions.apidescription.server\\7.0.3\\microsoft.extensions.apidescription.server.7.0.3.nupkg.sha512",
     "C:\\Users\\wilso\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\2.2.0\\microsoft.extensions.configuration.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\wilso\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\2.2.0\\microsoft.extensions.dependencyinjection.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\wilso\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\2.2.0\\microsoft.extensions.fileproviders.abstractions.2.2.0.nupkg.sha512",

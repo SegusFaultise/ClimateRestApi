@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CLIMATE-REST-API</name>
+    </assembly>
+    <members>
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.WeatherController.GetWeather">
+            <summary>
+            Gets all sensor readings
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

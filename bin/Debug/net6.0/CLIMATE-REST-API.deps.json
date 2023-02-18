@@ -11,6 +11,7 @@
           "AspNetCore.Identity.Mongo": "8.3.3",
           "Microsoft.AspNet.WebApi.Cors": "5.2.9",
           "Microsoft.AspNetCore.Authentication": "2.2.0",
+          "Microsoft.Extensions.ApiDescription.Server": "7.0.3",
           "MongoDB.Bson": "2.19.0",
           "MongoDB.Driver": "2.19.0",
           "Swashbuckle.AspNetCore": "6.5.0",
@@ -193,7 +194,7 @@
         }
       },
       "Microsoft.CSharp/4.5.0": {},
-      "Microsoft.Extensions.ApiDescription.Server/6.0.5": {},
+      "Microsoft.Extensions.ApiDescription.Server/7.0.3": {},
       "Microsoft.Extensions.Configuration.Abstractions/2.2.0": {
         "dependencies": {
           "Microsoft.Extensions.Primitives": "2.2.0"
@@ -541,7 +542,7 @@
       },
       "Swashbuckle.AspNetCore/6.5.0": {
         "dependencies": {
-          "Microsoft.Extensions.ApiDescription.Server": "6.0.5",
+          "Microsoft.Extensions.ApiDescription.Server": "7.0.3",
           "Swashbuckle.AspNetCore.Swagger": "6.5.0",
           "Swashbuckle.AspNetCore.SwaggerGen": "6.5.0",
           "Swashbuckle.AspNetCore.SwaggerUI": "6.5.0"
@@ -1431,12 +1432,12 @@
       "path": "microsoft.csharp/4.5.0",
       "hashPath": "microsoft.csharp.4.5.0.nupkg.sha512"
     },
-    "Microsoft.Extensions.ApiDescription.Server/6.0.5": {
+    "Microsoft.Extensions.ApiDescription.Server/7.0.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-Ckb5EDBUNJdFWyajfXzUIMRkhf52fHZOQuuZg/oiu8y7zDCVwD0iHhew6MnThjHmevanpxL3f5ci2TtHQEN6bw==",
-      "path": "microsoft.extensions.apidescription.server/6.0.5",
-      "hashPath": "microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512"
+      "sha512": "sha512-oMgb3CMeOvhZVDNR+i31LZI6JdiPzLBgMUKARRvisDq+rU1LZSk0qPWK2MUv0Vvz6oShGnGk3X6OpBDwBl41DQ==",
+      "path": "microsoft.extensions.apidescription.server/7.0.3",
+      "hashPath": "microsoft.extensions.apidescription.server.7.0.3.nupkg.sha512"
     },
     "Microsoft.Extensions.Configuration.Abstractions/2.2.0": {
       "type": "package",
