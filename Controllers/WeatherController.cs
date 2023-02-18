@@ -31,7 +31,7 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
 
         #region Http Get Weather
         /// <summary>
-        /// Gets all sensor readings
+        /// Gets all Sensor Readings
         /// </summary>
         /// <returns></returns>
         [EnableCors]
@@ -44,6 +44,10 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         #endregion
 
         #region Http Get Max Precipitation
+        /// <summary>
+        /// Gets The Max Precipitation
+        /// </summary>
+        /// <returns></returns>
         [EnableCors]
         [HttpGet]
         [Route("GetMaxPrecipitation")]
@@ -70,7 +74,11 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         #endregion
 
         #region Http Get Fields Based On Time & Date Aysnc
-        [EnableCors("{}")]
+        /// <summary>
+        /// Gets Fields Based On Time And Date Aysnc
+        /// </summary>
+        /// <returns></returns>
+        [EnableCors()]
         [HttpGet]
         [Route("GetFieldsBasedOnTimeAndDate")]
         public async Task<IActionResult> GetFieldsBasedOnTimeAndDate(string device, DateTime date_time)
@@ -96,6 +104,10 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         #endregion
 
         #region Http Get Max Tempreture Aysnc
+        /// <summary>
+        /// Gets Max Tempreture
+        /// </summary>
+        /// <returns></returns>
         [EnableCors]
         [HttpGet]
         [Route("GetMaxTemp")]
@@ -122,6 +134,10 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         #endregion
 
         #region Http Post Weather
+        /// <summary>
+        /// Post New Sensor Readings
+        /// </summary>
+        /// <returns></returns>
         [EnableCors]
         [HttpPost]
         public async Task<IActionResult> PostWeatherAsync([FromBody]SensorDataModel weatherModel)
@@ -139,6 +155,10 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         #endregion
 
         #region Http Post Manny Weather
+        /// <summary>
+        /// Post Manny Sensor Readings
+        /// </summary>
+        /// <returns></returns>
         [EnableCors]
         [HttpPost]
         [Route("PostMannyWeather")]
@@ -168,6 +188,10 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         #endregion
 
         #region Http Put Weather (Precipitation mm/h)
+        /// <summary>
+        /// Updates Precipitation Based On Device Name
+        /// </summary>
+        /// <returns></returns>
         [EnableCors]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePrecipitationAsync(string id, double precipitation_mm_h)
