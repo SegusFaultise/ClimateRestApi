@@ -67,8 +67,13 @@ namespace CLIMATE_REST_API.Controllers
         /// <returns></returns>
         [EnableCors]
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] UserModel user_model)
+        public async Task<IActionResult> CreateUser([FromBody] UserModel user_model, string api_token)
         {
+            if (AuthenticateUser(api_token, "Admin").Result == false)
+            {
+                return Unauthorized("Unauthorized");
+            }
+
             await _mongodbServices.CreatedUserAsync(user_model);
             return CreatedAtAction(nameof(GetAllUsers), new { id = user_model.Id }, user_model); ;
         }

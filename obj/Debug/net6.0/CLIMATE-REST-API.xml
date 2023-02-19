@@ -18,7 +18,7 @@
             <param name="role"></param>
             <returns></returns>
         </member>
-        <member name="M:CLIMATE_REST_API.Controllers.UserController.CreateUser(CLIMATE_REST_API.Models.UserModel)">
+        <member name="M:CLIMATE_REST_API.Controllers.UserController.CreateUser(CLIMATE_REST_API.Models.UserModel,System.String)">
             <summary>
             Creates a single user and can only be performed by an admin
             </summary>

@@ -47,11 +47,6 @@ builder.Services.AddCors(options =>
 
 #endregion
 
-#region Adding Authentication
-
-
-#endregion
-
 #region Instanciate {app} Variable With Build() From {builder} variable
 var app = builder.Build();
 #endregion
