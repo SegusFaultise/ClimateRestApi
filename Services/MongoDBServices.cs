@@ -132,12 +132,12 @@ namespace CLIMATE_REST_API.Services
             return await _userCollection.Find(new BsonDocument()).Limit(10).ToListAsync();
         }
 
-        public async Task<UserModel> AuthenticateUserAsync(string api_token, string role)
+        public async Task<UserModel?> AuthenticateUserAsync(string api_token, string role)
         {
             var filter = Builders<UserModel>.Filter.Eq(u => u.ApiToken, api_token);
             var user = await _userCollection.Find(filter).FirstOrDefaultAsync();
 
-            if (user.ApiToken == null || user.Role != role)
+            if (user == null || user.Role != role)
             {
                 return null;
             }
@@ -162,7 +162,7 @@ namespace CLIMATE_REST_API.Services
             return true;
         }
 
-        public async Task DeleteUserByIdAsync(string id)
+        public async Task DeleteUserByIdAsync(string api_token, string id)
         {
             FilterDefinition<UserModel> filter = Builders<UserModel>.Filter.Eq("Id", id);
             await _userCollection.DeleteOneAsync(filter);

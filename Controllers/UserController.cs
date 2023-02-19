@@ -34,37 +34,47 @@ namespace CLIMATE_REST_API.Controllers
         }
         #endregion
 
-        #region Http Authenticate Users
-        [EnableCors]
+        #region Authenticate Users
         [HttpGet]
-        private async Task<bool> AuthenticateUser(string api_token, string role)
+      
+        public async Task<IActionResult> AuthenticateUser(string api_token, string role)
         {
+            var message = "";
+
             if (_mongodbServices.AuthenticateUserAsync(api_token, role) == null)
             {
-                return false;
+                message = "Login Invalid";
             }
-
-            await _mongodbServices.GetUserAsync();
-            return true;
+            else
+            {
+                message = "Login Valid";
+                await _mongodbServices.UpdateUserLoginTimeAsync(api_token, DateTime.Now);
+            }
+            return Json(message);
         }
         #endregion
 
         #region Http Post Users
         [EnableCors]
-        [HttpGet]
-        public async Task<IActionResult> CreateUser(UserModel user_model)
+        [HttpPost]
+        public async Task<IActionResult> CreateUser([FromBody] UserModel user_model)
         {
-            return await _mongodbServices.CreatedUserAsync(user_model);
+            await _mongodbServices.CreatedUserAsync(user_model);
+            return CreatedAtAction(nameof(GetAllUsers), new { id = user_model.Id }, user_model); ;
         }
         #endregion
 
         #region Http Delete User By Id
         [EnableCors]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> SeleteUserById(string id)
+        public async Task<IActionResult> SeleteUserById(string api_token, string id)
         {
-            await _mongodbServices.DeleteUserByIdAsync(id);
-            return NoContent();
+            if (AuthenticateUser(api_token, "Admin"))
+            {
+                await _mongodbServices.DeleteUserByIdAsync(api_token, id);
+                return Ok("User deleted successfully");
+            }
+            return BadRequest("An error has occured");
         }
         #endregion
     }

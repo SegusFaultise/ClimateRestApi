@@ -4,12 +4,6 @@
         <name>CLIMATE-REST-API</name>
     </assembly>
     <members>
-        <member name="M:CLIMATE_REST_API.Services.MongoDBServices.GetWeatherAsync">
-            <summary>
-            Gets 10 sensor readings 
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:CLIMATE_DATA_BRAZIL.Controllers.WeatherController.GetWeather">
             <summary>
             Gets all Sensor Readings
