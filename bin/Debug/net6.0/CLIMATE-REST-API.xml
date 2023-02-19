@@ -4,6 +4,35 @@
         <name>CLIMATE-REST-API</name>
     </assembly>
     <members>
+        <member name="M:CLIMATE_REST_API.Controllers.UserController.GetAllUsers">
+            <summary>
+            Gets all the user from the database
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_REST_API.Controllers.UserController.AuthenticateUser(System.String,System.String)">
+            <summary>
+            Authenticates the user to allow certian actions
+            </summary>
+            <param name="api_token"></param>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_REST_API.Controllers.UserController.CreateUser(CLIMATE_REST_API.Models.UserModel)">
+            <summary>
+            Creates a single user and can only be performed by an admin
+            </summary>
+            <param name="user_model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_REST_API.Controllers.UserController.DeleteUserById(System.String,System.String)">
+            <summary>
+            Deletes the user by id and can only be performed by an admin
+            </summary>
+            <param name="api_token"></param>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:CLIMATE_DATA_BRAZIL.Controllers.WeatherController.GetWeather">
             <summary>
             Gets all Sensor Readings

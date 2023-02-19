@@ -26,6 +26,10 @@ namespace CLIMATE_REST_API.Controllers
         #endregion
 
         #region Http Get Users
+        /// <summary>
+        /// Gets all the user from the database
+        /// </summary>
+        /// <returns></returns>
         [EnableCors]
         [HttpGet]
         public async Task<List<UserModel>> GetAllUsers()
@@ -35,6 +39,12 @@ namespace CLIMATE_REST_API.Controllers
         #endregion
 
         #region Authenticate Users
+        /// <summary>
+        /// Authenticates the user to allow certian actions
+        /// </summary>
+        /// <param name="api_token"></param>
+        /// <param name="role"></param>
+        /// <returns></returns>
         private async Task<bool> AuthenticateUser(string api_token, string role)
         {
             var auth = await _mongodbServices.AuthenticateUserAsync(api_token, role);
@@ -50,6 +60,11 @@ namespace CLIMATE_REST_API.Controllers
         #endregion
 
         #region Http Post Users
+        /// <summary>
+        /// Creates a single user and can only be performed by an admin
+        /// </summary>
+        /// <param name="user_model"></param>
+        /// <returns></returns>
         [EnableCors]
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] UserModel user_model)
@@ -60,9 +75,15 @@ namespace CLIMATE_REST_API.Controllers
         #endregion
 
         #region Http Delete User By Id
+        /// <summary>
+        /// Deletes the user by id and can only be performed by an admin
+        /// </summary>
+        /// <param name="api_token"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [EnableCors]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> SeleteUserById(string api_token, string id)
+        public async Task<IActionResult> DeleteUserById(string api_token, string id)
         {
             if (AuthenticateUser(api_token, "Admin").Result == false)
             {
