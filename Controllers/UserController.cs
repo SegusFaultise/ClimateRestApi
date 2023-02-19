@@ -34,6 +34,30 @@ namespace CLIMATE_REST_API.Controllers
         }
         #endregion
 
+        #region Http Authenticate Users
+        [EnableCors]
+        [HttpGet]
+        private async Task<bool> AuthenticateUser(string api_token, string role)
+        {
+            if (_mongodbServices.AuthenticateUserAsync(api_token, role) == null)
+            {
+                return false;
+            }
+
+            await _mongodbServices.GetUserAsync();
+            return true;
+        }
+        #endregion
+
+        #region Http Post Users
+        [EnableCors]
+        [HttpGet]
+        public async Task<IActionResult> CreateUser(UserModel user_model)
+        {
+            return await _mongodbServices.CreatedUserAsync(user_model);
+        }
+        #endregion
+
         #region Http Delete User By Id
         [EnableCors]
         [HttpDelete("{id}")]

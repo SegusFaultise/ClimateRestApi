@@ -12,6 +12,8 @@ using System.Web.Http.Filters;
 using System.Collections;
 using System.Text.Json;
 using Newtonsoft.Json.Linq;
+using Microsoft.OpenApi.Writers;
+using System.Web.Http.Results;
 #endregion
 
 namespace CLIMATE_REST_API.Services
@@ -35,10 +37,6 @@ namespace CLIMATE_REST_API.Services
         #endregion
 
         #region Weather Aysnc Methods
-        /// <summary>
-        /// Gets 10 sensor readings 
-        /// </summary>
-        /// <returns></returns>
         public async Task<List<SensorDataModel>> GetWeatherAsync()
         {
             return await _weatherCollection.Find(new BsonDocument()).Limit(10).ToListAsync();
@@ -110,10 +108,10 @@ namespace CLIMATE_REST_API.Services
             return;
         }
 
-        public void CreateMannyWeatherAsync(List<SensorDataModel> weather)
+        public async void CreateMannyWeatherAsync(List<SensorDataModel> weather)
         { 
 
-            _weatherCollection.InsertMany(weather);
+            await _weatherCollection.InsertManyAsync(weather);
             return;
         }
 
@@ -134,10 +132,49 @@ namespace CLIMATE_REST_API.Services
             return await _userCollection.Find(new BsonDocument()).Limit(10).ToListAsync();
         }
 
+        public async Task<UserModel> AuthenticateUserAsync(string api_token, string role)
+        {
+            var filter = Builders<UserModel>.Filter.Eq(u => u.ApiToken, api_token);
+            var user = await _userCollection.Find(filter).FirstOrDefaultAsync();
+
+            if (user.ApiToken == null || user.Role != role)
+            {
+                return null;
+            }
+
+            return user;
+        }
+
+        public async Task<bool> CreatedUserAsync(UserModel user_model)
+        {
+            var filter = Builders<UserModel>.Filter.Eq(u => u.UserEmail, user_model.UserEmail);
+            var existing_user = await _userCollection.Find(filter).FirstOrDefaultAsync();
+
+            if (existing_user != null)
+            {
+                return false;
+            }
+
+            user_model.ApiToken = Guid.NewGuid().ToString();
+            user_model.LoginDate= DateTime.Now;
+
+            await _userCollection.InsertOneAsync(user_model);
+            return true;
+        }
+
         public async Task DeleteUserByIdAsync(string id)
         {
             FilterDefinition<UserModel> filter = Builders<UserModel>.Filter.Eq("Id", id);
             await _userCollection.DeleteOneAsync(filter);
+            return;
+        }
+
+        public async Task UpdateUserLoginTimeAsync(string api_token, DateTime login_date_time)
+        {
+            var filter = Builders<UserModel>.Filter.Eq(u => u.ApiToken, api_token);
+            var update = Builders<UserModel>.Update.Set(u => u.LoginDate, login_date_time);
+
+            await _userCollection.UpdateOneAsync(filter, update);
             return;
         }
         #endregion
