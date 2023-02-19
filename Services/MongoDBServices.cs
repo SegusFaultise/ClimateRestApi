@@ -156,7 +156,7 @@ namespace CLIMATE_REST_API.Services
             }
 
             user_model.ApiToken = Guid.NewGuid().ToString();
-            user_model.LoginDate= DateTime.Now;
+            user_model.CreatedDate= DateTime.Now;
 
             await _userCollection.InsertOneAsync(user_model);
             return true;

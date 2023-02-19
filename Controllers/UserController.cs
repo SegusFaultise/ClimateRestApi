@@ -35,22 +35,17 @@ namespace CLIMATE_REST_API.Controllers
         #endregion
 
         #region Authenticate Users
-        [HttpGet]
-      
-        public async Task<IActionResult> AuthenticateUser(string api_token, string role)
+        private async Task<bool> AuthenticateUser(string api_token, string role)
         {
-            var message = "";
+            var auth = await _mongodbServices.AuthenticateUserAsync(api_token, role);
 
-            if (_mongodbServices.AuthenticateUserAsync(api_token, role) == null)
+            if (auth == null)
             {
-                message = "Login Invalid";
+                return false;
             }
-            else
-            {
-                message = "Login Valid";
-                await _mongodbServices.UpdateUserLoginTimeAsync(api_token, DateTime.Now);
-            }
-            return Json(message);
+
+            await _mongodbServices.UpdateUserLoginTimeAsync(api_token, DateTime.Now);
+            return true;
         }
         #endregion
 
@@ -69,12 +64,12 @@ namespace CLIMATE_REST_API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> SeleteUserById(string api_token, string id)
         {
-            if (AuthenticateUser(api_token, "Admin"))
+            if (AuthenticateUser(api_token, "Admin").Result == false)
             {
-                await _mongodbServices.DeleteUserByIdAsync(api_token, id);
-                return Ok("User deleted successfully");
+                return Unauthorized("Unauthorized");
             }
-            return BadRequest("An error has occured");
+            await _mongodbServices.DeleteUserByIdAsync(api_token, id);
+            return Ok("User deleted successfully");
         }
         #endregion
     }
