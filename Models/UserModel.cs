@@ -25,5 +25,11 @@ namespace CLIMATE_REST_API.Models
 
         [BsonElement("data_base")]
         public string DataBase { get; set; } = null!;
+
+        [BsonElement("login_date")]
+        public DateTime? LoginDate { get; set; } = null!;
+
+        [BsonElement("api_token")]
+        public string ApiToken { get; set; } = null!;
     }
 }

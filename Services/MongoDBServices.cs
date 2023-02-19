@@ -21,7 +21,6 @@ namespace CLIMATE_REST_API.Services
         #region Setting The IMongoCollection To Weather
         private readonly IMongoCollection<SensorDataModel> _weatherCollection;
         private readonly IMongoCollection<UserModel> _userCollection;
-        private readonly IMongoCollection<AdminModel> _adminCollection;
         #endregion
 
         #region ConnectionURI, Database & Collection - Variables
@@ -32,11 +31,14 @@ namespace CLIMATE_REST_API.Services
 
             _weatherCollection = database.GetCollection<SensorDataModel>(mongodbSettings.Value.Collection1);
             _userCollection = database.GetCollection<UserModel>(mongodbSettings.Value.Collection2);
-            _adminCollection = database.GetCollection<AdminModel>(mongodbSettings.Value.Collection3);
         }
         #endregion
 
         #region Weather Aysnc Methods
+        /// <summary>
+        /// Gets 10 sensor readings 
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<SensorDataModel>> GetWeatherAsync()
         {
             return await _weatherCollection.Find(new BsonDocument()).Limit(10).ToListAsync();
@@ -137,13 +139,6 @@ namespace CLIMATE_REST_API.Services
             FilterDefinition<UserModel> filter = Builders<UserModel>.Filter.Eq("Id", id);
             await _userCollection.DeleteOneAsync(filter);
             return;
-        }
-        #endregion
-
-        #region Admin Aysnc Methods
-        public async Task<List<AdminModel>> GetAdminAsync()
-        {
-            return await _adminCollection.Find(new BsonDocument()).Limit(10).ToListAsync();
         }
         #endregion
     }
