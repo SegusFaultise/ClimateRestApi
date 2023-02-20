@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 #region Add Services To The Container 
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
 builder.Services.AddSingleton<MongoDBServices>();
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {

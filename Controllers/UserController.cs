@@ -98,6 +98,47 @@ namespace CLIMATE_REST_API.Controllers
             return Ok("User deleted successfully");
         }
         #endregion
+
+        #region Http Patch Users Role
+        [EnableCors]
+        [HttpPatch]
+        [Route("PatchUsers")]
+        public async Task<ActionResult> UpdateUsers( UserModel user_model, string role, DateTime date_start, DateTime date_end)
+        {
+            try
+            {
+                List<UserModel> user = new List<UserModel>();
+
+                var exception = user[3];
+
+                bool succeeded = false;
+                switch (user_model.Role)
+                {
+                    case "Role":
+                        succeeded = await _mongodbServices.UpdateManyRole(role);
+                        break;
+                    case "Date":
+                        succeeded = await _mongodbServices.UpdateManyCreatedDate(date_start, date_end);
+                        break;
+                    default:
+                        break;
+                }
+
+                if (succeeded)
+                {
+                    return Ok("Updated Successfully");
+                }
+                else
+                {
+                    return BadRequest("No properties matched, or no properties updated");
+                }
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message, statusCode: 500);
+            }
+        }
+        #endregion
     }
     #endregion
 }

@@ -14,6 +14,7 @@ using System.Text.Json;
 using Newtonsoft.Json.Linq;
 using Microsoft.OpenApi.Writers;
 using System.Web.Http.Results;
+using System.Text.RegularExpressions;
 #endregion
 
 namespace CLIMATE_REST_API.Services
@@ -176,6 +177,62 @@ namespace CLIMATE_REST_API.Services
 
             await _userCollection.UpdateOneAsync(filter, update);
             return;
+        }
+
+        public async Task<bool> UpdateManyRole(string role)
+        {
+            var filter = Builders<UserModel>.Filter.Not("Admin");
+            var update_role = Builders<UserModel>.Update.Set(c => c.Role, role);
+            var result = await _userCollection.UpdateManyAsync(filter, update_role);
+
+            return result.ModifiedCount > 0;
+        }
+
+        public async Task<bool> UpdateManyCreatedDate(DateTime date_start, DateTime date_end)
+        {
+            var update_created_date = Builders<UserModel>.Update.Set(c => c.CreatedDate, DateTime.Now);
+            var filter_1 = Builders<UserModel>.Filter.Lt(u => u.CreatedDate, date_end);
+            var filter_2 = Builders<UserModel>.Filter.Gt(u => u.CreatedDate, date_start);
+            var filters = Builders<UserModel>.Filter.And(filter_1, filter_2);
+            var result = await _userCollection.UpdateManyAsync(filters, update_created_date);
+
+            return result.ModifiedCount > 0;
+        }
+
+        private FilterDefinition<UserModel> BuildFilter(UserFilter noteFilter)
+        {
+            var builder = Builders<UserModel>.Filter;
+
+            var filter = builder.Empty;
+
+            if (!String.IsNullOrEmpty(noteFilter?.Role))
+            {
+                var regexFilter = Regex.Escape(noteFilter.Role);
+                filter &= builder.Regex(c => c.Role, BsonRegularExpression.Create(regexFilter));
+
+            }
+
+            if (!String.IsNullOrEmpty(noteFilter?.CreatedDate))
+            {
+                // Add a Contains filter for the Body
+                var regexFilter = Regex.Escape(noteFilter.CreatedDate);
+                filter &= builder.Regex(c => c.CreatedDate, BsonRegularExpression.Create(regexFilter));
+            }
+
+            if (noteFilter != null && noteFilter.CreatedFrom.HasValue)
+            {
+                // add a greater than filter for the creation date
+                filter &= builder.Gte(c => c.CreatedDate, noteFilter.CreatedFrom.Value);
+            }
+
+            if (noteFilter != null && noteFilter.CreatedTo.HasValue)
+            {
+                // add a less than filter for the creation date
+                filter &= builder.Lte(c => c.CreatedDate, noteFilter.CreatedTo.Value);
+            }
+
+            return filter;
+
         }
         #endregion
     }
