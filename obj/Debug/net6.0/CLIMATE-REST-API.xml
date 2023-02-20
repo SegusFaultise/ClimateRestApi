@@ -4,6 +4,54 @@
         <name>CLIMATE-REST-API</name>
     </assembly>
     <members>
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.GetAllSensors">
+            <summary>
+            Gets all sensor readings [Limited to 10 readings due to swagger not being able to load in more then 5000 records]
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.GetSensorById(System.String)">
+            <summary>
+            Gets a sensor reading by id
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.GetMaxPrecipitation(System.String)">
+            <summary>
+            Gets the max precipitation of a single sensor
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.GetFieldsBasedOnTimeAndDate(System.String,System.DateTime)">
+            <summary>
+            Gets fields based on time and date
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.GetMaxTemp(System.DateTime,System.DateTime)">
+            <summary>
+            Gets max tempreture based on a time range
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.PostSingleSensorAsync(CLIMATE_REST_API.Models.SensorDataModel)">
+            <summary>
+            Post new sensor reading
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.PostMannyWeatherAsync(System.Collections.Generic.List{CLIMATE_REST_API.Models.SensorDataModel})">
+            <summary>
+            Post manny sensor readings
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.UpdatePrecipitationAsync(System.String,System.Double)">
+            <summary>
+            Updates precipitation based on the id
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:CLIMATE_REST_API.Controllers.UserController.GetAllUsers">
             <summary>
             Gets all the user from the database
@@ -31,48 +79,6 @@
             </summary>
             <param name="api_token"></param>
             <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.WeatherController.GetWeather">
-            <summary>
-            Gets all Sensor Readings
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.WeatherController.GetMaxPrecipitation(System.String)">
-            <summary>
-            Gets The Max Precipitation
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.WeatherController.GetFieldsBasedOnTimeAndDate(System.String,System.DateTime)">
-            <summary>
-            Gets Fields Based On Time And Date Aysnc
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.WeatherController.GetMaxTemp(System.DateTime,System.DateTime)">
-            <summary>
-            Gets Max Tempreture
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.WeatherController.PostWeatherAsync(CLIMATE_REST_API.Models.SensorDataModel)">
-            <summary>
-            Post New Sensor Readings
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.WeatherController.PostMannyWeatherAsync(System.Collections.Generic.List{CLIMATE_REST_API.Models.SensorDataModel})">
-            <summary>
-            Post Manny Sensor Readings
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.WeatherController.UpdatePrecipitationAsync(System.String,System.Double)">
-            <summary>
-            Updates Precipitation Based On Id
-            </summary>
             <returns></returns>
         </member>
     </members>

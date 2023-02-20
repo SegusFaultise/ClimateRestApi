@@ -44,6 +44,12 @@ namespace CLIMATE_REST_API.Services
             return await _weatherCollection.Find(new BsonDocument()).Limit(10).ToListAsync();
         }
 
+        public async Task<SensorDataModel> GetSensorByIdAsync(string id)
+        {
+            var filter = Builders<SensorDataModel>.Filter.Eq("Id", id);
+            return await _weatherCollection.Find(filter).FirstAsync();
+        }
+
         public async Task<SensorDataModel> GetDeviceNameAsync(string device)
         {
             var filter = Builders<SensorDataModel>.Filter.Eq("Device Name", device);

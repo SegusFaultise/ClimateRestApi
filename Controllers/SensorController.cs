@@ -16,36 +16,50 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
     #endregion
 
     #region Weather Controller
-    public class WeatherController : Controller
+    public class SensorController : Controller
     {
         #region region MongoDBServices Variable
         private readonly MongoDBServices _mongodbServices;
         #endregion
 
         #region Setting _mongodbServices To mongodbServices
-        public WeatherController(MongoDBServices mongodbServices)
+        public SensorController(MongoDBServices mongodbServices)
         {
             _mongodbServices = mongodbServices;
         }
         #endregion
 
-        #region Http Get Weather
+        #region Http Get All Sensors
         /// <summary>
-        /// Gets all Sensor Readings
+        /// Gets all sensor readings [Limited to 10 readings due to swagger not being able to load in more then 5000 records]
         /// </summary>
         /// <returns></returns>
         [EnableCors]
         [HttpGet]
         [Route("GetAllSesnors")]
-        public async Task<List<SensorDataModel>> GetWeather()
+        public async Task<List<SensorDataModel>> GetAllSensors()
         {
             return await _mongodbServices.GetWeatherAsync();
         }
         #endregion
 
+        #region Http Gets A Sensor Reading By Id
+        /// <summary>
+        /// Gets a sensor reading by id
+        /// </summary>
+        /// <returns></returns>
+        [EnableCors]
+        [HttpGet]
+        [Route("GetSesnorById")]
+        public async Task<SensorDataModel> GetSensorById(string id)
+        {
+           return await _mongodbServices.GetSensorByIdAsync(id);
+        }
+        #endregion
+
         #region Http Get Max Precipitation
         /// <summary>
-        /// Gets The Max Precipitation
+        /// Gets the max precipitation of a single sensor
         /// </summary>
         /// <returns></returns>
         [EnableCors]
@@ -75,7 +89,7 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
 
         #region Http Get Fields Based On Time & Date Aysnc
         /// <summary>
-        /// Gets Fields Based On Time And Date Aysnc
+        /// Gets fields based on time and date
         /// </summary>
         /// <returns></returns>
         [EnableCors()]
@@ -105,7 +119,7 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
 
         #region Http Get Max Tempreture Aysnc
         /// <summary>
-        /// Gets Max Tempreture
+        /// Gets max tempreture based on a time range
         /// </summary>
         /// <returns></returns>
         [EnableCors]
@@ -133,19 +147,20 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         }
         #endregion
 
-        #region Http Post Weather
+        #region Http Post A Single Sesnsor
         /// <summary>
-        /// Post New Sensor Readings
+        /// Post new sensor reading
         /// </summary>
         /// <returns></returns>
         [EnableCors]
         [HttpPost]
-        public async Task<IActionResult> PostWeatherAsync([FromBody]SensorDataModel weatherModel)
+        [Route("PostSingleSensor")]
+        public async Task<IActionResult> PostSingleSensorAsync([FromBody] SensorDataModel weatherModel)
         {
             try
             {
                 await _mongodbServices.CreateWeatherAsync(weatherModel);
-                return CreatedAtAction(nameof(GetWeather), new { id = weatherModel.Id }, weatherModel);
+                return CreatedAtAction(nameof(GetAllSensors), new { id = weatherModel.Id }, weatherModel);
             }
             catch
             {
@@ -156,7 +171,7 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
 
         #region Http Post Manny Weather
         /// <summary>
-        /// Post Manny Sensor Readings
+        /// Post manny sensor readings
         /// </summary>
         /// <returns></returns>
         [EnableCors]
@@ -167,7 +182,7 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
             try
             {
                 _mongodbServices.CreateMannyWeatherAsync(weatherModel);
-                return CreatedAtAction(nameof(GetWeather), new { id = weatherModel }, weatherModel);
+                return CreatedAtAction(nameof(GetAllSensors), new { id = weatherModel }, weatherModel);
             }
             catch
             {
@@ -180,35 +195,35 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         [EnableCors]
         [HttpPost]
         [Route("PostWeatherToWebsite")]
-        public async Task<IActionResult> PostWeatherToWebisteAsync(SensorDataModel weatherModel)
+        public async Task<IActionResult> PostWeatherToWebisteAsync(SensorDataModel sensor_model)
         {
-            await _mongodbServices.CreateWeatherAsync(weatherModel);
-            return CreatedAtAction(nameof(GetWeather), new { id = weatherModel.Id }, weatherModel);
+            await _mongodbServices.CreateWeatherAsync(sensor_model);
+            return CreatedAtAction(nameof(GetAllSensors), new { id = sensor_model.Id }, sensor_model);
         }
         #endregion
 
         #region Http Put Weather (Precipitation mm/h)
         /// <summary>
-        /// Updates Precipitation Based On Id
+        /// Updates precipitation based on the id
         /// </summary>
         /// <returns></returns>
         [EnableCors]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePrecipitationAsync(string id, double precipitation_mm_h)
-        {
+        { 
             try
             {
                 if (precipitation_mm_h != 0)
                 {
                     await _mongodbServices.UpdatePrecipitaionAsync(id, precipitation_mm_h);
-                    return CreatedAtAction(nameof(GetWeather), "Precipitation updated");
+                    return Ok("Precipitation updated");
                 }
 
-                return CreatedAtAction(nameof(GetWeather), "You must enter a value into the [precipitation] field");
+                return BadRequest("You must enter a value into the [precipitation] field");
             }
             catch
             {
-                return BadRequest("Incorect details");
+                return Problem(statusCode: 500);
             }
         }
         #endregion
