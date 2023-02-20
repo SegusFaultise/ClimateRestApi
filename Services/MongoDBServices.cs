@@ -101,7 +101,7 @@ namespace CLIMATE_REST_API.Services
                     Temperature_C = u.Temperature_C,
                 });
 
-            var result = await _weatherCollection.Aggregate().Match(filters).SortByDescending(u => u.Temperature_C).Project(projectStage).ToListAsync();
+            var result = await _weatherCollection.Aggregate().Match(filters).SortByDescending(u => u.Temperature_C).Project(projectStage).Limit(10).ToListAsync();
             return result.ToJson();
         }
 
