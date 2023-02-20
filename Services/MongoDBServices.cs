@@ -15,6 +15,7 @@ using Newtonsoft.Json.Linq;
 using Microsoft.OpenApi.Writers;
 using System.Web.Http.Results;
 using System.Text.RegularExpressions;
+using System.Data;
 #endregion
 
 namespace CLIMATE_REST_API.Services
@@ -88,8 +89,9 @@ namespace CLIMATE_REST_API.Services
 
         public async Task<string> GetMaxTempAsync(DateTime date_time_start, DateTime date_time_end)
         {
-            var time_filter_start = Builders<SensorDataModel>.Filter.Gt("Time", date_time_start);
-            var time_filter_end = Builders<SensorDataModel>.Filter.Lt("Time", date_time_end);
+            var filter_1 = Builders<SensorDataModel>.Filter.Gt("Time", date_time_start);
+            var filter_2 = Builders<SensorDataModel>.Filter.Lt("Time", date_time_end);
+            var filters = Builders<SensorDataModel>.Filter.And(filter_1, filter_2);
 
             var projectStage = Builders<SensorDataModel>.Projection.Expression(u =>
                 new
@@ -99,7 +101,7 @@ namespace CLIMATE_REST_API.Services
                     Temperature_C = u.Temperature_C,
                 });
 
-            var result = await _weatherCollection.Aggregate().Match(time_filter_start).SortByDescending(u => u.Temperature_C).Project(projectStage).ToListAsync();
+            var result = await _weatherCollection.Aggregate().Match(filters).SortByDescending(u => u.Temperature_C).Project(projectStage).ToListAsync();
             return result.ToJson();
         }
 
@@ -179,61 +181,80 @@ namespace CLIMATE_REST_API.Services
             return;
         }
 
-        public async Task<bool> UpdateManyRole(string role)
+        public async Task UpdateUserEmailAsync(string api_token, string email, DateTime start_date, DateTime end_date)
         {
-            var filter = Builders<UserModel>.Filter.Not("Admin");
-            var update_role = Builders<UserModel>.Update.Set(c => c.Role, role);
-            var result = await _userCollection.UpdateManyAsync(filter, update_role);
+            var filter_1 = Builders<UserModel>.Filter.Eq(u => u.ApiToken, api_token);
+            var filter_2 = Builders<UserModel>.Filter.Gte(u => u.CreatedDate, start_date);
+            var filter_3 = Builders<UserModel>.Filter.Lte(u => u.CreatedDate, end_date);
+            var filters = Builders<UserModel>.Filter.And(filter_1, filter_2, filter_3);
+            var update = Builders<UserModel>.Update.Set(u => u.UserEmail, email);
 
-            return result.ModifiedCount > 0;
+            await _userCollection.UpdateManyAsync(filters, update);
+            return;
         }
 
-        public async Task<bool> UpdateManyCreatedDate(DateTime date_start, DateTime date_end)
+        public async Task UpdateUserRoleAsync(string api_token, string role)
         {
-            var update_created_date = Builders<UserModel>.Update.Set(c => c.CreatedDate, DateTime.Now);
-            var filter_1 = Builders<UserModel>.Filter.Lt(u => u.CreatedDate, date_end);
-            var filter_2 = Builders<UserModel>.Filter.Gt(u => u.CreatedDate, date_start);
-            var filters = Builders<UserModel>.Filter.And(filter_1, filter_2);
-            var result = await _userCollection.UpdateManyAsync(filters, update_created_date);
+            var filter = Builders<UserModel>.Filter.Eq(u => u.ApiToken, api_token);
+            var update = Builders<UserModel>.Update.Set(u => u.Role, role);
 
-            return result.ModifiedCount > 0;
+            await _userCollection.UpdateManyAsync(filter, update);
+            return;
         }
 
-        private FilterDefinition<UserModel> BuildFilter(UserFilter noteFilter)
-        {
-            var builder = Builders<UserModel>.Filter;
+        //public async Task<bool> UpdateManyRoleAsync(UserFilter user_filter, string role)
+        //{
+        //    var filter = BuildFilter(user_filter);
+        //    var update_role = Builders<UserModel>.Update.Set(c => c.Role, role);
 
-            var filter = builder.Empty;
+        //    await _userCollection.UpdateManyAsync(filter, update_role);
+        //    return true;
+        //}
 
-            if (!String.IsNullOrEmpty(noteFilter?.Role))
-            {
-                var regexFilter = Regex.Escape(noteFilter.Role);
-                filter &= builder.Regex(c => c.Role, BsonRegularExpression.Create(regexFilter));
+        //public async Task<bool> UpdateManyEmailAsync(UserFilter user_filter, string email)
+        //{
+        //    var filter = BuildFilter(user_filter);
+        //    var update_email = Builders<UserModel>.Update.Set(c => c.UserEmail, email);
+        //    var result = await _userCollection.UpdateManyAsync(filter, update_email);
 
-            }
+        //    return true;
+        //}
 
-            if (!String.IsNullOrEmpty(noteFilter?.CreatedDate))
-            {
-                // Add a Contains filter for the Body
-                var regexFilter = Regex.Escape(noteFilter.CreatedDate);
-                filter &= builder.Regex(c => c.CreatedDate, BsonRegularExpression.Create(regexFilter));
-            }
+        //private FilterDefinition<UserModel> BuildFilter(UserFilter noteFilter)
+        //{
+        //    var builder = Builders<UserModel>.Filter;
 
-            if (noteFilter != null && noteFilter.CreatedFrom.HasValue)
-            {
-                // add a greater than filter for the creation date
-                filter &= builder.Gte(c => c.CreatedDate, noteFilter.CreatedFrom.Value);
-            }
+        //    var filter = builder.Empty;
 
-            if (noteFilter != null && noteFilter.CreatedTo.HasValue)
-            {
-                // add a less than filter for the creation date
-                filter &= builder.Lte(c => c.CreatedDate, noteFilter.CreatedTo.Value);
-            }
+        //    if (!String.IsNullOrEmpty(noteFilter?.Role))
+        //    {
+        //        var regexFilter = Regex.Escape(noteFilter.Role);
+        //        filter &= builder.Regex(c => c.Role, BsonRegularExpression.Create(regexFilter));
 
-            return filter;
+        //    }
 
-        }
-        #endregion
+        //    if (!String.IsNullOrEmpty(noteFilter?.UserEmail))
+        //    {
+        //        // Add a Contains filter for the Body
+        //        var regexFilter = Regex.Escape(noteFilter.UserEmail);
+        //        filter &= builder.Regex(c => c.CreatedDate, BsonRegularExpression.Create(regexFilter));
+        //    }
+
+        //    if (noteFilter != null && noteFilter.CreatedFrom.HasValue)
+        //    {
+        //        // add a greater than filter for the creation date
+        //        filter &= builder.Gte(c => c.CreatedDate, noteFilter.CreatedFrom.Value);
+        //    }
+
+        //    if (noteFilter != null && noteFilter.CreatedTo.HasValue)
+        //    {
+        //        // add a less than filter for the creation date
+        //        filter &= builder.Lte(c => c.CreatedDate, noteFilter.CreatedTo.Value);
+        //    }
+
+        //    return filter;
+
+        //}
     }
 }
+#endregion

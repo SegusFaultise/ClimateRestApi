@@ -95,50 +95,67 @@ namespace CLIMATE_REST_API.Controllers
                 return Unauthorized("Unauthorized");
             }
             await _mongodbServices.DeleteUserByIdAsync(api_token, id);
-            return Ok("User deleted successfully");
+            return Ok("User deleted");
         }
         #endregion
 
-        #region Http Patch Users Role
+        #region Http Patch User Email & Role
+
         [EnableCors]
-        [HttpPatch]
-        [Route("PatchUsers")]
-        public async Task<ActionResult> UpdateUsers( UserModel user_model, string role, DateTime date_start, DateTime date_end)
+        [HttpPatch("{start_date} {end_date}")]
+        public async Task<IActionResult> PatchUsers(string api_token, string email, string role, DateTime start_date, DateTime end_date)
         {
-            try
-            {
-                List<UserModel> user = new List<UserModel>();
+            //if (AuthenticateUser(api_token, "Admin").Result == false)
+            //{
+            //    return Unauthorized("Unauthorized");
+            //}
 
-                var exception = user[3];
-
-                bool succeeded = false;
-                switch (user_model.Role)
-                {
-                    case "Role":
-                        succeeded = await _mongodbServices.UpdateManyRole(role);
-                        break;
-                    case "Date":
-                        succeeded = await _mongodbServices.UpdateManyCreatedDate(date_start, date_end);
-                        break;
-                    default:
-                        break;
-                }
-
-                if (succeeded)
-                {
-                    return Ok("Updated Successfully");
-                }
-                else
-                {
-                    return BadRequest("No properties matched, or no properties updated");
-                }
-            }
-            catch (Exception e)
-            {
-                return Problem(e.Message, statusCode: 500);
-            }
+            await _mongodbServices.UpdateUserEmailAsync(api_token, email, start_date, end_date);
+            await _mongodbServices.UpdateUserRoleAsync(api_token, role);
+            return Ok();
         }
         #endregion
+
+        //    #region Http Patch Users Role
+        //    [EnableCors]
+        //    [HttpPatch]
+        //    [Route("PatchUsers")]
+        //    public async Task<ActionResult> UpdateUsersAsync(UserPatchModel patch_model)
+        //    {
+        //        try
+        //        {
+        //            List<UserModel> user = new List<UserModel>();
+
+        //            var exception = user[3];
+
+        //            bool succeeded = false;
+        //            switch (patch_model.PropertyName)
+        //            {
+        //                case "Role":
+        //                    succeeded = await _mongodbServices.UpdateManyRoleAsync(patch_model.Filter, patch_model.PropertyValue);
+        //                    break;
+        //                case "Email":
+        //                    succeeded = await _mongodbServices.UpdateManyEmailAsync(patch_model.Filter, patch_model.PropertyValue);
+        //                    break;
+        //                default:
+        //                    break;
+        //            }
+
+        //            if (succeeded)
+        //            {
+        //                return Ok("Updated Successfully");
+        //            }
+        //            else
+        //            {
+        //                return BadRequest("No properties matched, or no properties updated");
+        //            }
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            return Problem(e.Message, statusCode: 500);
+        //        }
+        //    }
+        //    #endregion
     }
     #endregion
 }

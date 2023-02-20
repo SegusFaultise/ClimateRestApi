@@ -58,3 +58,5 @@ C:\Users\wilso\Source\Repos\NeuralNuts\CLIMATE-REST-API\obj\Debug\net6.0\CLIMATE
 C:\Users\wilso\Source\Repos\NeuralNuts\CLIMATE-REST-API\obj\Debug\net6.0\CLIMATE-REST-API.pdb
 C:\Users\wilso\Source\Repos\NeuralNuts\CLIMATE-REST-API\obj\Debug\net6.0\CLIMATE-REST-API.genruntimeconfig.cache
 C:\Users\wilso\Source\Repos\NeuralNuts\CLIMATE-REST-API\obj\Debug\net6.0\ref\CLIMATE-REST-API.dll
+C:\Users\wilso\Source\Repos\NeuralNuts\CLIMATE-REST-API\bin\Debug\net6.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\wilso\Source\Repos\NeuralNuts\CLIMATE-REST-API\bin\Debug\net6.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
