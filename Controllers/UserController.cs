@@ -11,7 +11,7 @@ namespace CLIMATE_REST_API.Controllers
     [Route("~/api/[controller]")]
     #endregion
 
-    #region Weather Controller
+    #region User Controller
     public class UserController : Controller
     {
         #region region MongoDBServices Variable

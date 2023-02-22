@@ -29,6 +29,27 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         }
         #endregion
 
+        #region Authenticate Users
+        /// <summary>
+        /// Authenticates the user to allow certian actions
+        /// </summary>
+        /// <param name="api_token"></param>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        private async Task<bool> AuthenticateUser(string api_token, string role)
+        {
+            var auth = await _mongodbServices.AuthenticateUserAsync(api_token, role);
+
+            if (auth == null)
+            {
+                return false;
+            }
+
+            await _mongodbServices.UpdateUserLoginTimeAsync(api_token, DateTime.Now);
+            return true;
+        }
+        #endregion
+
         #region Http Get All Sensors
         /// <summary>
         /// Gets all sensor readings [Limited to 10 readings due to swagger not being able to load in more then 5000 records]
@@ -209,17 +230,22 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         /// <returns></returns>
         [EnableCors]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePrecipitationAsync(string id, double precipitation_mm_h)
+        public async Task<IActionResult> UpdatePrecipitationAsync(string id, double precipitation_mm_h, string api_token)
         { 
             try
             {
-                if (precipitation_mm_h != 0)
+                if (AuthenticateUser(api_token, "Admin").Result == false)
                 {
-                    await _mongodbServices.UpdatePrecipitaionAsync(id, precipitation_mm_h);
-                    return Ok("Precipitation updated");
+                    return Unauthorized("Unauthorized");
+                }
+                
+                if (precipitation_mm_h == 0)
+                {
+                    return BadRequest("You must enter a value into the [precipitation] field");
                 }
 
-                return BadRequest("You must enter a value into the [precipitation] field");
+                await _mongodbServices.UpdatePrecipitaionAsync(id, precipitation_mm_h);
+                return Ok("Precipitation updated");
             }
             catch
             {

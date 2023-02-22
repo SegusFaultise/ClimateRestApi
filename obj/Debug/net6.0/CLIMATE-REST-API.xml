@@ -4,6 +4,14 @@
         <name>CLIMATE-REST-API</name>
     </assembly>
     <members>
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.AuthenticateUser(System.String,System.String)">
+            <summary>
+            Authenticates the user to allow certian actions
+            </summary>
+            <param name="api_token"></param>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
         <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.GetAllSensors">
             <summary>
             Gets all sensor readings [Limited to 10 readings due to swagger not being able to load in more then 5000 records]
@@ -46,7 +54,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.UpdatePrecipitationAsync(System.String,System.Double)">
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.UpdatePrecipitationAsync(System.String,System.Double,System.String)">
             <summary>
             Updates precipitation based on the id
             </summary>
