@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Cors;
 using MongoDB.Bson;
 using Newtonsoft.Json.Linq;
 using System;
+using System.ComponentModel;
+using System.Linq;
 #endregion
 
 namespace CLIMATE_DATA_BRAZIL.Controllers
@@ -152,18 +154,24 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
             {
                 var result = await _mongodbServices.GetMaxTempAsync(date_time_start, date_time_end);
 
-                if (result != null)
+                if (result == null)
                 {
-                    return Ok(result);
+                    return BadRequest("No entry found");
                 }
+
+                if (date_time_start > date_time_end || date_time_end < date_time_start)
+                {
+                    return BadRequest("Do you have a time travel machine?");
+                }
+
                 else
                 {
-                    return Problem(statusCode: 500);
+                    return Ok(result);
                 }
             }
             catch
             {
-                return BadRequest("No entry found");
+                return Problem();
             }
         }
         #endregion
@@ -270,7 +278,7 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
             }
             catch
             {
-                return Problem(statusCode: 500);
+                return Problem();
             }
         }
         #endregion
