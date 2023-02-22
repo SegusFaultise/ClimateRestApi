@@ -52,12 +52,12 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
 
         #region Http Get All Sensors
         /// <summary>
-        /// Gets all sensor readings [Limited to 10 readings due to swagger not being able to load in more then 5000 records]
+        /// Gets all sensor readings [Limited to 100 readings due to swagger not being able to load in more then 5000 records]
         /// </summary>
         /// <returns></returns>
         [EnableCors]
         [HttpGet]
-        [Route("GetAllSesnors")]
+        [Route("GetAllSensors")]
         public async Task<List<SensorDataModel>> GetAllSensors()
         {
             return await _mongodbServices.GetWeatherAsync();
@@ -229,7 +229,7 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         /// </summary>
         /// <returns></returns>
         [EnableCors]
-        [HttpPut("{id}")]
+        [HttpPut("{id} UpdatePrecipitation")]
         public async Task<IActionResult> UpdatePrecipitationAsync(string id, double precipitation_mm_h, string api_token)
         { 
             try

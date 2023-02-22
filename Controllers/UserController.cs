@@ -67,6 +67,7 @@ namespace CLIMATE_REST_API.Controllers
         /// <returns></returns>
         [EnableCors]
         [HttpPost]
+        [Route("PostUser")]
         public async Task<IActionResult> CreateUser([FromBody] UserModel user_model, string api_token)
         {
             if (AuthenticateUser(api_token, "Admin").Result == false)
@@ -87,20 +88,30 @@ namespace CLIMATE_REST_API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [EnableCors]
-        [HttpDelete("{id}")]
+        [HttpDelete("{id} DeleteUser")]
         public async Task<IActionResult> DeleteUserById(string api_token, string id)
         {
             if (AuthenticateUser(api_token, "Admin").Result == false)
             {
                 return Unauthorized("Unauthorized");
             }
+
             await _mongodbServices.DeleteUserByIdAsync(api_token, id);
             return Ok("User deleted");
         }
         #endregion
 
         #region Http Patch User Email & Role
-
+        /// <summary>
+        /// Updates user emails and roles based on a date range
+        /// can only be performed by an admin
+        /// </summary>
+        /// <param name="api_token"></param>
+        /// <param name="email"></param>
+        /// <param name="role"></param>
+        /// <param name="start_date"></param>
+        /// <param name="end_date"></param>
+        /// <returns></returns>
         [EnableCors]
         [HttpPatch("{start_date} {end_date}")]
         public async Task<IActionResult> PatchUsers(string api_token, string email, string role, DateTime start_date, DateTime end_date)

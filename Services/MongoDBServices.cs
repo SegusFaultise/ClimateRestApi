@@ -20,6 +20,7 @@ using System.Data;
 
 namespace CLIMATE_REST_API.Services
 {
+    #region User Controller
     public class MongoDBServices
     {
         #region Setting The IMongoCollection To Weather
@@ -39,23 +40,23 @@ namespace CLIMATE_REST_API.Services
         #endregion
 
         #region Weather Aysnc Methods
+
+        #region Gets All Sensor Readings
         public async Task<List<SensorDataModel>> GetWeatherAsync()
         {
-            return await _weatherCollection.Find(new BsonDocument()).Limit(10).ToListAsync();
+            return await _weatherCollection.Find(new BsonDocument()).Limit(100).ToListAsync();
         }
+        #endregion
 
+        #region Http Gets A Sensor Reading By Id
         public async Task<SensorDataModel> GetSensorByIdAsync(string id)
         {
             var filter = Builders<SensorDataModel>.Filter.Eq("Id", id);
             return await _weatherCollection.Find(filter).FirstAsync();
         }
+        #endregion
 
-        public async Task<SensorDataModel> GetDeviceNameAsync(string device)
-        {
-            var filter = Builders<SensorDataModel>.Filter.Eq("Device Name", device);
-            return await _weatherCollection.Find(filter).FirstAsync();
-        }
-
+        #region Gets The Max Precipitation Of A Device And DateTime Range
         public async Task<string> GetMaxPrecipitaionAsync(string device)
         {
             var device_filter = Builders<SensorDataModel>.Filter.Eq("Device Name", device);
@@ -72,7 +73,9 @@ namespace CLIMATE_REST_API.Services
             var w = await _weatherCollection.Aggregate().Match(device_filter).Match(time_filter).SortByDescending(u => u.Precipitation_mm_h).Project(project_stage).FirstAsync();
             return w.ToJson();
         }
+        #endregion
 
+        #region Gets Readings Based On A DateTime Range And A Device
         public async Task<string> GetFieldsBasedOnTimeAndDateAsync(string device, DateTime date_time)
         {
             var device_filter = Builders<SensorDataModel>.Filter.Eq("Device Name", device);
@@ -92,7 +95,9 @@ namespace CLIMATE_REST_API.Services
             var w = await _weatherCollection.Aggregate().Match(time_filter).Match(device_filter).Project(projectStage).FirstAsync();
             return w.ToJson();
         }
+        #endregion
 
+        #region Gets The Max Tempreture Based On A Start Date And A End Date
         public async Task<string> GetMaxTempAsync(DateTime date_time_start, DateTime date_time_end)
         {
             var filter_1 = Builders<SensorDataModel>.Filter.Gt("Time", date_time_start);
@@ -110,20 +115,26 @@ namespace CLIMATE_REST_API.Services
             var result = await _weatherCollection.Aggregate().Match(filters).SortByDescending(u => u.Temperature_C).Project(projectStage).Limit(10).ToListAsync();
             return result.ToJson();
         }
+        #endregion
 
+        #region Creates A New Sesnor Reading
         public async Task CreateWeatherAsync(SensorDataModel weather)
         {
             await _weatherCollection.InsertOneAsync(weather);
             return;
         }
+        #endregion
 
+        #region Creates Manny Sensor Readings 
         public async void CreateMannyWeatherAsync(List<SensorDataModel> weather)
         { 
 
             await _weatherCollection.InsertManyAsync(weather);
             return;
         }
+        #endregion
 
+        #region Updates The Precipitation For A Single Device
         public async Task UpdatePrecipitaionAsync(string id, double precipitation_mm_h)
         {
             FilterDefinition<SensorDataModel> filter = Builders<SensorDataModel>.Filter.Eq("Id", id);
@@ -132,15 +143,20 @@ namespace CLIMATE_REST_API.Services
             await _weatherCollection.UpdateOneAsync(filter, update);
             return;
         }
+        #endregion
 
         #endregion
 
         #region User Aysnc Methods
+
+        #region Gets All Users
         public async Task<List<UserModel>> GetUserAsync()
         {
             return await _userCollection.Find(new BsonDocument()).Limit(10).ToListAsync();
         }
+        #endregion
 
+        #region Authenticates A User
         public async Task<UserModel?> AuthenticateUserAsync(string api_token, string role)
         {
             var filter = Builders<UserModel>.Filter.Eq(u => u.ApiToken, api_token);
@@ -153,7 +169,9 @@ namespace CLIMATE_REST_API.Services
 
             return user;
         }
+        #endregion
 
+        #region Creates A New User
         public async Task<bool> CreatedUserAsync(UserModel user_model)
         {
             var filter = Builders<UserModel>.Filter.Eq(u => u.UserEmail, user_model.UserEmail);
@@ -170,14 +188,18 @@ namespace CLIMATE_REST_API.Services
             await _userCollection.InsertOneAsync(user_model);
             return true;
         }
+        #endregion
 
+        #region Deletes A User
         public async Task DeleteUserByIdAsync(string api_token, string id)
         {
             FilterDefinition<UserModel> filter = Builders<UserModel>.Filter.Eq("Id", id);
             await _userCollection.DeleteOneAsync(filter);
             return;
         }
+        #endregion
 
+        #region Updates A User Login Time
         public async Task UpdateUserLoginTimeAsync(string api_token, DateTime login_date_time)
         {
             var filter = Builders<UserModel>.Filter.Eq(u => u.ApiToken, api_token);
@@ -186,7 +208,8 @@ namespace CLIMATE_REST_API.Services
             await _userCollection.UpdateOneAsync(filter, update);
             return;
         }
-
+        #endregion
+    
         public async Task UpdateUserEmailAsync(string api_token, string email, DateTime start_date, DateTime end_date)
         {
             var filter_1 = Builders<UserModel>.Filter.Eq(u => u.ApiToken, api_token);
@@ -261,6 +284,7 @@ namespace CLIMATE_REST_API.Services
         //    return filter;
 
         //}
+        #endregion
     }
+    #endregion
 }
-#endregion
