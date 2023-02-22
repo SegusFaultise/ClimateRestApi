@@ -20,7 +20,6 @@ using System.Data;
 
 namespace CLIMATE_REST_API.Services
 {
-    #region User Controller
     public class MongoDBServices
     {
         #region Setting The IMongoCollection To Weather
@@ -141,7 +140,7 @@ namespace CLIMATE_REST_API.Services
             UpdateDefinition<SensorDataModel> update = Builders<SensorDataModel>.Update.Set("Precipitation mm/h", precipitation_mm_h);
 
             await _weatherCollection.UpdateOneAsync(filter, update);
-            return;
+            return ;
         }
         #endregion
 
@@ -286,5 +285,4 @@ namespace CLIMATE_REST_API.Services
         //}
         #endregion
     }
-    #endregion
 }

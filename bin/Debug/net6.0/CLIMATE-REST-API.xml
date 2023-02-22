@@ -101,5 +101,10 @@
             <param name="end_date"></param>
             <returns></returns>
         </member>
+        <member name="T:CLIMATE_REST_API.Models.SensorDataModel">
+            <summary>
+            Sensor data model
+            </summary>
+        </member>
     </members>
 </doc>

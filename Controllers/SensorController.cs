@@ -180,12 +180,33 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         {
             try
             {
-                await _mongodbServices.CreateWeatherAsync(weatherModel);
-                return CreatedAtAction(nameof(GetAllSensors), new { id = weatherModel.Id }, weatherModel);
+                if (weatherModel.Humidity_percentage + 
+                    weatherModel.Longitude + 
+                    weatherModel.Latitude + 
+                    weatherModel.Precipitation_mm_h + 
+                    weatherModel.WindDirection +
+                    weatherModel.AtmosphericPressure_kPa +
+                    weatherModel.Temperature_C + 
+                    weatherModel.SolarRadiation_Wm2 +
+                    weatherModel.MaxWindSpeed_ms == 0)
+                {
+                    return BadRequest("Please fill in the fields");
+                }
+
+                if (weatherModel.Device == "")
+                {
+                    return BadRequest("Please fill in the fields");
+                }
+
+                else
+                {
+                    await _mongodbServices.CreateWeatherAsync(weatherModel);
+                    return CreatedAtAction(nameof(GetAllSensors), new { id = weatherModel.Id }, weatherModel);
+                }
             }
             catch
             {
-                return BadRequest("Incorect details");
+                return Problem();
             }
         }
         #endregion

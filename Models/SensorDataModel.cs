@@ -13,6 +13,9 @@ using System.Text.Json.Serialization;
 namespace CLIMATE_REST_API.Models
 {
     #region Weather Model
+    /// <summary>
+    /// Sensor data model
+    /// </summary>
     public class SensorDataModel
     {
         [BsonId]
@@ -21,6 +24,8 @@ namespace CLIMATE_REST_API.Models
         public string? Id { get; set; }
 
         [BsonElement("Device Name")]
+        [MaxLength(20)]
+        [DefaultValue("")]
         public string Device { get; set; } = null!;
 
         [BsonElement("Precipitation mm/h")]
