@@ -1,8 +1,9 @@
-﻿
+﻿#region Imports
 using CLIMATE_REST_API.Models;
 using CLIMATE_REST_API.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+#endregion
 
 namespace CLIMATE_REST_API.Controllers
 {
@@ -55,6 +56,7 @@ namespace CLIMATE_REST_API.Controllers
             }
 
             await _mongodbServices.UpdateUserLoginTimeAsync(api_token, DateTime.Now);
+
             return true;
         }
         #endregion
@@ -64,6 +66,7 @@ namespace CLIMATE_REST_API.Controllers
         /// Creates a single user and can only be performed by an admin
         /// </summary>
         /// <param name="user_model"></param>
+        /// <param name="api_token"></param>
         /// <returns></returns>
         [EnableCors]
         [HttpPost]
@@ -76,7 +79,10 @@ namespace CLIMATE_REST_API.Controllers
             }
 
             await _mongodbServices.CreatedUserAsync(user_model);
-            return CreatedAtAction(nameof(GetAllUsers), new { id = user_model.Id }, user_model); ;
+
+            return CreatedAtAction(nameof(GetAllUsers), 
+                new { id = user_model.Id }, 
+                user_model); ;
         }
         #endregion
 
@@ -97,6 +103,7 @@ namespace CLIMATE_REST_API.Controllers
             }
 
             await _mongodbServices.DeleteUserByIdAsync(api_token, id);
+
             return Ok("User deleted");
         }
         #endregion
@@ -123,6 +130,7 @@ namespace CLIMATE_REST_API.Controllers
 
             await _mongodbServices.UpdateUserEmailAsync(api_token, email, start_date, end_date);
             await _mongodbServices.UpdateUserRoleAsync(api_token, role);
+
             return Ok();
         }
         #endregion

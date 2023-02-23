@@ -62,7 +62,7 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         [Route("GetAllSensors")]
         public async Task<List<SensorDataModel>> GetAllSensors()
         {
-            return await _mongodbServices.GetWeatherAsync();
+            return await _mongodbServices.GetAllSensorReadingsAsync();
         }
         #endregion
 
@@ -70,6 +70,7 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         /// <summary>
         /// Gets a sensor reading by id
         /// </summary>
+        /// <param name="id"></param>
         /// <returns></returns>
         [EnableCors]
         [HttpGet]
@@ -84,6 +85,7 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         /// <summary>
         /// Gets the max precipitation of a single sensor
         /// </summary>
+        /// <param name="device"></param>
         /// <returns></returns>
         [EnableCors]
         [HttpGet]
@@ -120,6 +122,8 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         /// <summary>
         /// Gets fields based on time and date
         /// </summary>
+        /// <param name="device"></param>
+        /// <param name="date_time"></param>
         /// <returns></returns>
         [EnableCors()]
         [HttpGet]
@@ -156,6 +160,8 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         /// <summary>
         /// Gets max tempreture based on a time range
         /// </summary>
+        /// <param name="date_time_start"></param>
+        /// <param name="date_time_end"></param>
         /// <returns></returns>
         [EnableCors]
         [HttpGet]
@@ -192,36 +198,40 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         /// <summary>
         /// Post new sensor reading
         /// </summary>
+        /// <param name="weather_model"></param>
         /// <returns></returns>
         [EnableCors]
         [HttpPost]
         [Route("PostSingleSensor")]
-        public async Task<IActionResult> PostSingleSensorAsync([FromBody] SensorDataModel weatherModel)
+        public async Task<IActionResult> PostSingleSensorAsync([FromBody] SensorDataModel weather_model)
         {
             try
             {
-                if (weatherModel.Humidity_percentage + 
-                    weatherModel.Longitude + 
-                    weatherModel.Latitude + 
-                    weatherModel.Precipitation_mm_h + 
-                    weatherModel.WindDirection +
-                    weatherModel.AtmosphericPressure_kPa +
-                    weatherModel.Temperature_C + 
-                    weatherModel.SolarRadiation_Wm2 +
-                    weatherModel.MaxWindSpeed_ms == 0)
+                if (weather_model.Humidity_percentage + 
+                    weather_model.Longitude + 
+                    weather_model.Latitude + 
+                    weather_model.Precipitation_mm_h + 
+                    weather_model.WindDirection +
+                    weather_model.AtmosphericPressure_kPa +
+                    weather_model.Temperature_C + 
+                    weather_model.SolarRadiation_Wm2 +
+                    weather_model.MaxWindSpeed_ms == 0)
                 {
                     return BadRequest("Please fill in the fields");
                 }
 
-                if (weatherModel.Device == "")
+                if (weather_model.Device == "")
                 {
                     return BadRequest("Please fill in the fields");
                 }
 
                 else
                 {
-                    await _mongodbServices.CreateWeatherAsync(weatherModel);
-                    return CreatedAtAction(nameof(GetAllSensors), new { id = weatherModel.Id }, weatherModel);
+                    await _mongodbServices.CreateWeatherAsync(weather_model);
+
+                    return CreatedAtAction(nameof(GetAllSensors), 
+                        new { id = weather_model.Id },
+                        weather_model);
                 }
             }
             catch
@@ -235,11 +245,12 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         /// <summary>
         /// Post manny sensor readings
         /// </summary>
+        /// <param name="weather_model"></param>
         /// <returns></returns>
         [EnableCors]
         [HttpPost]
         [Route("PostMannyWeather")]
-        public async Task<IActionResult> PostMannyWeatherAsync([FromBody] List<SensorDataModel> weatherModel)
+        public async Task<IActionResult> PostMannyWeatherAsync([FromBody] List<SensorDataModel> weather_model)
         {
             try
             {
@@ -249,8 +260,11 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
                 }
                 else
                 {
-                    await _mongodbServices.CreateMannyWeatherAsync(weatherModel);
-                    return CreatedAtAction(nameof(GetAllSensors), new { id = weatherModel }, weatherModel);
+                    await _mongodbServices.CreateMannyWeatherAsync(weather_model);
+
+                    return CreatedAtAction(nameof(GetAllSensors), 
+                        new { id = weather_model },
+                        weather_model);
                 }
             }
             catch
@@ -267,7 +281,10 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         public async Task<IActionResult> PostWeatherToWebisteAsync(SensorDataModel sensor_model)
         {
             await _mongodbServices.CreateWeatherAsync(sensor_model);
-            return CreatedAtAction(nameof(GetAllSensors), new { id = sensor_model.Id }, sensor_model);
+
+            return CreatedAtAction(nameof(GetAllSensors), 
+                new { id = sensor_model.Id },
+                sensor_model);
         }
         #endregion
 
@@ -275,6 +292,9 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         /// <summary>
         /// Updates precipitation based on the id
         /// </summary>
+        /// <param name="id"></param>
+        /// <param name="precipitation_mm_h"></param>
+        /// <param name="api_token"></param>
         /// <returns></returns>
         [EnableCors]
         [HttpPut("{id} UpdatePrecipitation")]
@@ -293,6 +313,7 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
                 }
 
                 await _mongodbServices.UpdatePrecipitaionAsync(id, precipitation_mm_h);
+
                 return Ok("Precipitation updated");
             }
             catch
