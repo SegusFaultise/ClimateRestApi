@@ -17,7 +17,7 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
     [Route("~/api/[controller]")]
     #endregion
 
-    #region Weather Controller
+    #region Sensor Controller
     public class SensorController : Controller
     {
         #region region MongoDBServices Variable
