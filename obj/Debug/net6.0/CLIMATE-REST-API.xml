@@ -71,7 +71,7 @@
             <param name="api_token"></param>
             <returns></returns>
         </member>
-        <member name="M:CLIMATE_REST_API.Controllers.TeaPotController.ImATeaPot(CLIMATE_REST_API.Models.TeaPotModel)">
+        <member name="M:CLIMATE_REST_API.Controllers.TeaPotController.ImATeaPot">
             <summary>
             I am the tea pot and the tea pot is me
             </summary>
@@ -122,11 +122,6 @@
         <member name="T:CLIMATE_REST_API.Models.SensorDataModel">
             <summary>
             Sensor data model
-            </summary>
-        </member>
-        <member name="T:CLIMATE_REST_API.Models.TeaPotModel">
-            <summary>
-            The tea pot
             </summary>
         </member>
     </members>

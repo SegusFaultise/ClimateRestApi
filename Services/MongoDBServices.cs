@@ -308,13 +308,6 @@ namespace CLIMATE_REST_API.Services
 
         //}
         #endregion
-
-        #region Tea Pot Async Method
-        public async Task<TeaPotModel> GetTeaPotAsync(TeaPotModel tea_pot_model)
-        {
-            return tea_pot_model;
-        }
-        #endregion
     }
     #endregion
 }

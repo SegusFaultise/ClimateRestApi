@@ -28,10 +28,9 @@ namespace CLIMATE_REST_API.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("ImATeaPot")]
-        public async Task<IActionResult> ImATeaPot(TeaPotModel tea_pot_model)
+        public async Task<IActionResult> ImATeaPot()
         {
-            var result = await _mongodbServices.GetTeaPotAsync(tea_pot_model);
-            return Ok(result);
+            return Problem("Im a tea pot: 🫖", statusCode: 418);
         }
         #endregion
     }

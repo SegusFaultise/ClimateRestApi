@@ -38,7 +38,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
         {
-            builder.WithOrigins("https://localhost:44351", "https://localhost:4200")
+            builder.WithOrigins("https://localhost:44351", "https://localhost:4200", "https://www.google.com/")
                                 .AllowAnyHeader()
                                 .AllowAnyMethod();
         });
