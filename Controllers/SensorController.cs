@@ -94,13 +94,19 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
             {
                 var result = await _mongodbServices.GetMaxPrecipitaionAsync(device);
 
-                if (result != null)
+                if(result == null)
                 {
-                    return Ok(result);
+                    return BadRequest("No entry found");
                 }
+
+                if (device == null)
+                {
+                    return BadRequest("Please fill in the device field");
+                }
+
                 else
                 {
-                    return Problem(statusCode: 500);
+                    return Ok(result);
                 }
             }
             catch
@@ -124,18 +130,24 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
             {
                 var result = await _mongodbServices.GetFieldsBasedOnTimeAndDateAsync(device, date_time);
 
-                if (result != null)
+                if (result == null)
                 {
-                    return Ok(result);
+                    return BadRequest("No entry found");
                 }
+
+                if (device == null)
+                {
+                    return BadRequest("Please fill in the device field");
+                }
+
                 else
                 {
-                    return Problem(statusCode: 500);
+                    return Ok(result);
                 }
             }
             catch
             {
-                return BadRequest("No entry found");
+                return Problem();
             }
         }
         #endregion
@@ -227,16 +239,23 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         [EnableCors]
         [HttpPost]
         [Route("PostMannyWeather")]
-        public ActionResult PostMannyWeatherAsync([FromBody] List<SensorDataModel> weatherModel)
+        public async Task<IActionResult> PostMannyWeatherAsync([FromBody] List<SensorDataModel> weatherModel)
         {
             try
             {
-                _mongodbServices.CreateMannyWeatherAsync(weatherModel);
-                return CreatedAtAction(nameof(GetAllSensors), new { id = weatherModel }, weatherModel);
+                if (Request.Body.Equals(0))
+                {
+                    return BadRequest("Please fill in the fields");
+                }
+                else
+                {
+                    await _mongodbServices.CreateMannyWeatherAsync(weatherModel);
+                    return CreatedAtAction(nameof(GetAllSensors), new { id = weatherModel }, weatherModel);
+                }
             }
             catch
             {
-                return BadRequest("Incorect details");
+                return Problem();
             }
         }
         #endregion

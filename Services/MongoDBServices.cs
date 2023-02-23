@@ -125,7 +125,7 @@ namespace CLIMATE_REST_API.Services
         #endregion
 
         #region Creates Manny Sensor Readings 
-        public async void CreateMannyWeatherAsync(List<SensorDataModel> weather)
+        public async Task CreateMannyWeatherAsync(List<SensorDataModel> weather)
         { 
 
             await _weatherCollection.InsertManyAsync(weather);
