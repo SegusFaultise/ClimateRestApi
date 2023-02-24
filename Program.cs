@@ -51,11 +51,8 @@ var app = builder.Build();
 #endregion
 
 #region Configure The HTTP Request Pipeline & Control When Swagger Is In Use
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 #region Enable Cors
 app.UseCors(builder =>
