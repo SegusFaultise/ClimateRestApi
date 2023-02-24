@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'REST-CLIMATE-API'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D1372501294B49108B8D9F4A7DE8F2A3 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0217B5CC10C9486699F48C2B426B88C8 }}
           package: .
