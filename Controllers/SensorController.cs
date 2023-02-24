@@ -297,7 +297,8 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         /// <param name="api_token"></param>
         /// <returns></returns>
         [EnableCors]
-        [HttpPut("{id} UpdatePrecipitation")]
+        [HttpPut]
+        [Route("{id} {api_token} UpdatePrecipitation")]
         public async Task<IActionResult> UpdatePrecipitationAsync(string id, double precipitation_mm_h, string api_token)
         { 
             try

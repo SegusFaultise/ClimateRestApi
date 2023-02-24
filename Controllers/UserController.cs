@@ -72,7 +72,7 @@ namespace CLIMATE_REST_API.Controllers
         /// <returns></returns>
         [EnableCors]
         [HttpPost]
-        [Route("PostUser")]
+        [Route("{api_token} PostUser")]
         public async Task<IActionResult> CreateUser([FromBody] UserModel user_model, string api_token)
         {
             if (AuthenticateUser(api_token, "Admin").Result == false)
@@ -96,7 +96,8 @@ namespace CLIMATE_REST_API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [EnableCors]
-        [HttpDelete("{id} DeleteUser")]
+        [HttpDelete]
+        [Route("{id} {api_token} DeleteUser")]
         public async Task<IActionResult> DeleteUserById(string api_token, string id)
         {
             if (AuthenticateUser(api_token, "Admin").Result == false)
@@ -110,11 +111,43 @@ namespace CLIMATE_REST_API.Controllers
         }
         #endregion
 
+        #region Http Deletes Users
+        /// <summary>
+        /// Deletes users if they havent logedin for 30 days can only be performed by an admin
+        /// </summary>
+        /// <param name="api_token"></param>
+        /// <param name="date_time_start"></param>
+        /// <param name="date_time_end"></param>
+        /// <returns></returns>
+        [EnableCors]
+        [HttpDelete]
+        [Route("{api_token} {date_time_start} {date_time_end} DeleteManyUsers")]
+        public async Task<IActionResult> DeleteManyUsers(string api_token, DateTime date_time_start, DateTime date_time_end)
+        {
+            if (AuthenticateUser(api_token, "Admin").Result == false)
+            {
+                return Unauthorized("Unauthorized");
+            }
+
+            await _mongodbServices.DeletesManyUsersAsync(api_token, date_time_start, date_time_end);
+
+            return Ok("Users deleted");
+        }
+        #endregion
+
         #region Http Patch Users Role
+        /// <summary>
+        /// Updates a users role based on a date range in which they were created
+        /// </summary>
+        /// <param name="patch_model"></param>
+        /// <param name="date_time_start"></param>
+        /// <param name="date_time_end"></param>
+        /// <param name="api_token"></param>
+        /// <returns></returns>
         [EnableCors]
         [HttpPatch]
-        [Route("PatchUsers")]
-        public async Task<IActionResult> UpdateUsersAsync([FromBody] JsonPatchDocument<List<UserModel>> patch_model, DateTime date_time_start, DateTime date_time_end)
+        [Route("{api_token} {date_time_start} {date_time_end} PatchUsers")]
+        public async Task<IActionResult> UpdateUsersAsync([FromBody] JsonPatchDocument<List<UserModel>> patch_model, DateTime date_time_start, DateTime date_time_end, string api_token)
         {
             var operation = patch_model.Operations.FirstOrDefault();
 
@@ -125,9 +158,19 @@ namespace CLIMATE_REST_API.Controllers
                     return BadRequest();
                 }
 
+                if (AuthenticateUser(api_token, "Admin").Result == false)
+                {
+                    return Unauthorized("Unauthorized");
+                }
+
+                if (date_time_start > date_time_end || date_time_end < date_time_start)
+                {
+                    return BadRequest("Do you have a time travel machine?");
+                }
+
                 else
                 {
-                    await _mongodbServices.PatchUsersRole(operation.path = "role", operation.value, date_time_start, date_time_end);
+                    await _mongodbServices.PatchUsersRoleAsync(operation.path, operation.value, date_time_start, date_time_end);
                     return Ok("Users roles have been updated");
                 }
             }

@@ -181,8 +181,8 @@ namespace CLIMATE_REST_API.Services
         #region Authenticates A User
         public async Task<UserModel?> AuthenticateUserAsync(string api_token, string role)
         {
-            var filter = Builders<UserModel>.Filter.Eq(u => u.ApiToken, api_token);
-            var user = await _userCollection.Find(filter).FirstOrDefaultAsync();
+            var api_token_filter = Builders<UserModel>.Filter.Eq(u => u.ApiToken, api_token);
+            var user = await _userCollection.Find(api_token_filter).FirstOrDefaultAsync();
 
             if (user == null || user.Role != role)
             {
@@ -222,34 +222,56 @@ namespace CLIMATE_REST_API.Services
         }
         #endregion
 
+
+        #region Deletes Many Users
+        public async Task<UserModel> DeletesManyUsersAsync(string api_token, DateTime date_time_start, DateTime date_time_end)
+        {
+            var filter_date_time_start = Builders<UserModel>.Filter.Gte(u => u.LoginDate, date_time_start);
+            var filter_date_time_end = Builders<UserModel>.Filter.Lte(u => u.LoginDate, date_time_end);
+            var filters = Builders<UserModel>.Filter.And(filter_date_time_start, filter_date_time_end);
+
+            var users = _userCollection.Find(filters).FirstOrDefault();
+
+            if (users == null)
+            {
+                return null;
+            }
+
+            await _userCollection.DeleteManyAsync(filters);
+            return users;
+        }
+        #endregion
+
         #region Updates A User Login Time
         public async Task UpdateUserLoginTimeAsync(string api_token, DateTime login_date_time)
         {
-            var filter = Builders<UserModel>.Filter.Eq(u => u.ApiToken, api_token);
+            var api_token_filter = Builders<UserModel>.Filter.Eq(u => u.ApiToken, api_token);
             var update = Builders<UserModel>.Update.Set(u => u.LoginDate, login_date_time);
 
-            await _userCollection.UpdateOneAsync(filter, update);
+            await _userCollection.UpdateOneAsync(api_token_filter, update);
             return;
         }
         #endregion
 
-        public async Task<UserModel?> PatchUsersRole(string property, object value, DateTime date_time_start, DateTime date_time_end)
+        #region Updates Many Users Roles
+        public async Task<UserModel?> PatchUsersRoleAsync(string property, object value, DateTime date_time_start, DateTime date_time_end)
         {
-            var filter_date_time_start = Builders<UserModel>.Filter.Gt(u => u.CreatedDate, date_time_start);
-            var filter_date_time_end = Builders<UserModel>.Filter.Lt(u => u.CreatedDate, date_time_end);
+            var filter_date_time_start = Builders<UserModel>.Filter.Gte(u => u.CreatedDate, date_time_start);
+            var filter_date_time_end = Builders<UserModel>.Filter.Lte(u => u.CreatedDate, date_time_end);
             var filters = Builders<UserModel>.Filter.And(filter_date_time_start, filter_date_time_end);
             var value_property_update = Builders<UserModel>.Update.Set(property, value);
 
             var users = _userCollection.Find(filters).FirstOrDefault();
 
-            if (users != null)
+            if (users == null)
             {
-                await _userCollection.UpdateManyAsync(filters, value_property_update);
+                return null;
             }
 
+            await _userCollection.UpdateManyAsync(filters, value_property_update);
             return users;
         }
-
+        #endregion
 
         #endregion
     }

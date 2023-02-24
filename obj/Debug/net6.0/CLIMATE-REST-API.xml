@@ -107,6 +107,25 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:CLIMATE_REST_API.Controllers.UserController.DeleteManyUsers(System.String,System.DateTime,System.DateTime)">
+            <summary>
+            Deletes users if they havent logedin for 30 days can only be performed by an admin
+            </summary>
+            <param name="api_token"></param>
+            <param name="date_time_start"></param>
+            <param name="date_time_end"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_REST_API.Controllers.UserController.UpdateUsersAsync(Microsoft.AspNetCore.JsonPatch.JsonPatchDocument{System.Collections.Generic.List{CLIMATE_REST_API.Models.UserModel}},System.DateTime,System.DateTime,System.String)">
+            <summary>
+            Updates a users role based on a date range in which they were created
+            </summary>
+            <param name="patch_model"></param>
+            <param name="date_time_start"></param>
+            <param name="date_time_end"></param>
+            <param name="api_token"></param>
+            <returns></returns>
+        </member>
         <member name="T:CLIMATE_REST_API.Models.SensorDataModel">
             <summary>
             Sensor data model
