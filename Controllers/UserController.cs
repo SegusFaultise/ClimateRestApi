@@ -4,6 +4,7 @@ using CLIMATE_REST_API.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 #endregion
 
 namespace CLIMATE_REST_API.Controllers
@@ -112,11 +113,10 @@ namespace CLIMATE_REST_API.Controllers
         #region Http Patch Users Role
         [EnableCors]
         [HttpPatch]
-        [Route("{id} PatchUsers")]
-        public async Task<ActionResult> UpdateUsersAsync([FromBody] JsonPatchDocument<UserModel> patch_model, string id)
+        [Route("PatchUsers")]
+        public async Task<IActionResult> UpdateUsersAsync([FromBody] JsonPatchDocument<List<UserModel>> patch_model, DateTime date_time_start, DateTime date_time_end)
         {
             var operation = patch_model.Operations.FirstOrDefault();
-            var result = await _mongodbServices.PatchUser(id, operation.path, operation.value);
 
             try
             {
@@ -127,7 +127,8 @@ namespace CLIMATE_REST_API.Controllers
 
                 else
                 {
-                    return Ok(result);
+                    await _mongodbServices.PatchUsersRole(operation.path = "role", operation.value, date_time_start, date_time_end);
+                    return Ok("Users roles have been updated");
                 }
             }
             catch (Exception e)

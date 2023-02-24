@@ -233,68 +233,24 @@ namespace CLIMATE_REST_API.Services
         }
         #endregion
 
-        public async Task<bool> PatchUser(string object_id, string property, object value)
+        public async Task<UserModel?> PatchUsersRole(string property, object value, DateTime date_time_start, DateTime date_time_end)
         {
-            var id_filter = Builders<UserModel>.Filter.Eq(c => c.Id, object_id);
+            var filter_date_time_start = Builders<UserModel>.Filter.Gt(u => u.CreatedDate, date_time_start);
+            var filter_date_time_end = Builders<UserModel>.Filter.Lt(u => u.CreatedDate, date_time_end);
+            var filters = Builders<UserModel>.Filter.And(filter_date_time_start, filter_date_time_end);
             var value_property_update = Builders<UserModel>.Update.Set(property, value);
-            var result = await _userCollection.UpdateOneAsync(id_filter, value_property_update);
 
-            return result.ModifiedCount > 0 ? true : false;
+            var users = _userCollection.Find(filters).FirstOrDefault();
+
+            if (users != null)
+            {
+                await _userCollection.UpdateManyAsync(filters, value_property_update);
+            }
+
+            return users;
         }
 
-        //public async Task<bool> UpdateManyRoleAsync(UserFilter user_filter, string role)
-        //{
-        //    var filter = BuildFilter(user_filter);
-        //    var update_role = Builders<UserModel>.Update.Set(c => c.Role, role);
 
-        //    await _userCollection.UpdateManyAsync(filter, update_role);
-        //    return true;
-        //}
-
-        //public async Task<bool> UpdateManyEmailAsync(UserFilter user_filter, string email)
-        //{
-        //    var filter = BuildFilter(user_filter);
-        //    var update_email = Builders<UserModel>.Update.Set(c => c.UserEmail, email);
-        //    var result = await _userCollection.UpdateManyAsync(filter, update_email);
-
-        //    return true;
-        //}
-
-        //private FilterDefinition<UserModel> BuildFilter(UserFilter noteFilter)
-        //{
-        //    var builder = Builders<UserModel>.Filter;
-
-        //    var filter = builder.Empty;
-
-        //    if (!String.IsNullOrEmpty(noteFilter?.Role))
-        //    {
-        //        var regexFilter = Regex.Escape(noteFilter.Role);
-        //        filter &= builder.Regex(c => c.Role, BsonRegularExpression.Create(regexFilter));
-
-        //    }
-
-        //    if (!String.IsNullOrEmpty(noteFilter?.UserEmail))
-        //    {
-        //        // Add a Contains filter for the Body
-        //        var regexFilter = Regex.Escape(noteFilter.UserEmail);
-        //        filter &= builder.Regex(c => c.CreatedDate, BsonRegularExpression.Create(regexFilter));
-        //    }
-
-        //    if (noteFilter != null && noteFilter.CreatedFrom.HasValue)
-        //    {
-        //        // add a greater than filter for the creation date
-        //        filter &= builder.Gte(c => c.CreatedDate, noteFilter.CreatedFrom.Value);
-        //    }
-
-        //    if (noteFilter != null && noteFilter.CreatedTo.HasValue)
-        //    {
-        //        // add a less than filter for the creation date
-        //        filter &= builder.Lte(c => c.CreatedDate, noteFilter.CreatedTo.Value);
-        //    }
-
-        //    return filter;
-
-        //}
         #endregion
     }
     #endregion
