@@ -3,19 +3,6 @@ using CLIMATE_REST_API.Models;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using Microsoft.Extensions.Options;
-using CLIMATE_REST_API.Models;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Mvc;
-using CLIMATE_DATA_BRAZIL.Controllers;
-using ZstdSharp.Unsafe;
-using System.Web.Http.Filters;
-using System.Collections;
-using System.Text.Json;
-using Newtonsoft.Json.Linq;
-using Microsoft.OpenApi.Writers;
-using System.Web.Http.Results;
-using System.Text.RegularExpressions;
-using System.Data;
 #endregion
 
 namespace CLIMATE_REST_API.Services

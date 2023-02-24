@@ -1,0 +1,7 @@
+C:\Users\wilso\Source\Repos\NeuralNuts\CLIMATE-REST-API\obj\Debug\net7.0\CLIMATE-REST-API.csproj.AssemblyReference.cache
+C:\Users\wilso\Source\Repos\NeuralNuts\CLIMATE-REST-API\obj\Debug\net7.0\CLIMATE-REST-API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\wilso\Source\Repos\NeuralNuts\CLIMATE-REST-API\obj\Debug\net7.0\CLIMATE-REST-API.AssemblyInfoInputs.cache
+C:\Users\wilso\Source\Repos\NeuralNuts\CLIMATE-REST-API\obj\Debug\net7.0\CLIMATE-REST-API.AssemblyInfo.cs
+C:\Users\wilso\Source\Repos\NeuralNuts\CLIMATE-REST-API\obj\Debug\net7.0\CLIMATE-REST-API.csproj.CoreCompileInputs.cache
+C:\Users\wilso\Source\Repos\NeuralNuts\CLIMATE-REST-API\obj\Debug\net7.0\CLIMATE-REST-API.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\wilso\Source\Repos\NeuralNuts\CLIMATE-REST-API\obj\Debug\net7.0\CLIMATE-REST-API.MvcApplicationPartsAssemblyInfo.cache
