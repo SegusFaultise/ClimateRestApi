@@ -232,26 +232,14 @@ namespace CLIMATE_REST_API.Services
             return;
         }
         #endregion
-    
-        public async Task UpdateUserEmailAsync(string api_token, string user_email, DateTime start_date, DateTime end_date)
+
+        public async Task<bool> PatchUser(string object_id, string property, object value)
         {
-            var filter_api_token = Builders<UserModel>.Filter.Eq(u => u.ApiToken, api_token);
-            var filter_start_date = Builders<UserModel>.Filter.Gte(u => u.CreatedDate, start_date);
-            var filter_end_date = Builders<UserModel>.Filter.Lte(u => u.CreatedDate, end_date);
-            var filters = Builders<UserModel>.Filter.And(filter_api_token, filter_start_date, filter_end_date);
-            var update_user_email = Builders<UserModel>.Update.Set(u => u.UserEmail, user_email);
+            var id_filter = Builders<UserModel>.Filter.Eq(c => c.Id, object_id);
+            var value_property_update = Builders<UserModel>.Update.Set(property, value);
+            var result = await _userCollection.UpdateOneAsync(id_filter, value_property_update);
 
-            await _userCollection.UpdateManyAsync(filters, update_user_email);
-            return;
-        }
-
-        public async Task UpdateUserRoleAsync(string api_token, string role)
-        {
-            var filter_api_token = Builders<UserModel>.Filter.Eq(u => u.ApiToken, api_token);
-            var update_role = Builders<UserModel>.Update.Set(u => u.Role, role);
-
-            await _userCollection.UpdateManyAsync(filter_api_token, update_role);
-            return;
+            return result.ModifiedCount > 0 ? true : false;
         }
 
         //public async Task<bool> UpdateManyRoleAsync(UserFilter user_filter, string role)

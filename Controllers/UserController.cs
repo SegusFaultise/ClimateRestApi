@@ -2,6 +2,7 @@
 using CLIMATE_REST_API.Models;
 using CLIMATE_REST_API.Services;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 #endregion
 
@@ -80,8 +81,8 @@ namespace CLIMATE_REST_API.Controllers
 
             await _mongodbServices.CreatedUserAsync(user_model);
 
-            return CreatedAtAction(nameof(GetAllUsers), 
-                new { id = user_model.Id }, 
+            return CreatedAtAction(nameof(GetAllUsers),
+                new { id = user_model.Id },
                 user_model); ;
         }
         #endregion
@@ -108,73 +109,33 @@ namespace CLIMATE_REST_API.Controllers
         }
         #endregion
 
-        #region Http Patch User Email & Role
-        /// <summary>
-        /// Updates user emails and roles based on a date range
-        /// can only be performed by an admin
-        /// </summary>
-        /// <param name="api_token"></param>
-        /// <param name="email"></param>
-        /// <param name="role"></param>
-        /// <param name="start_date"></param>
-        /// <param name="end_date"></param>
-        /// <returns></returns>
+        #region Http Patch Users Role
         [EnableCors]
-        [HttpPatch("{start_date} {end_date}")]
-        public async Task<IActionResult> PatchUsers(string api_token, string email, string role, DateTime start_date, DateTime end_date)
+        [HttpPatch]
+        [Route("{id} PatchUsers")]
+        public async Task<ActionResult> UpdateUsersAsync([FromBody] JsonPatchDocument<UserModel> patch_model, string id)
         {
-            //if (AuthenticateUser(api_token, "Admin").Result == false)
-            //{
-            //    return Unauthorized("Unauthorized");
-            //}
+            var operation = patch_model.Operations.FirstOrDefault();
+            var result = await _mongodbServices.PatchUser(id, operation.path, operation.value);
 
-            await _mongodbServices.UpdateUserEmailAsync(api_token, email, start_date, end_date);
-            await _mongodbServices.UpdateUserRoleAsync(api_token, role);
+            try
+            {
+                if (patch_model == null)
+                {
+                    return BadRequest();
+                }
 
-            return Ok();
+                else
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message, statusCode: 500);
+            }
         }
         #endregion
-
-        //    #region Http Patch Users Role
-        //    [EnableCors]
-        //    [HttpPatch]
-        //    [Route("PatchUsers")]
-        //    public async Task<ActionResult> UpdateUsersAsync(UserPatchModel patch_model)
-        //    {
-        //        try
-        //        {
-        //            List<UserModel> user = new List<UserModel>();
-
-        //            var exception = user[3];
-
-        //            bool succeeded = false;
-        //            switch (patch_model.PropertyName)
-        //            {
-        //                case "Role":
-        //                    succeeded = await _mongodbServices.UpdateManyRoleAsync(patch_model.Filter, patch_model.PropertyValue);
-        //                    break;
-        //                case "Email":
-        //                    succeeded = await _mongodbServices.UpdateManyEmailAsync(patch_model.Filter, patch_model.PropertyValue);
-        //                    break;
-        //                default:
-        //                    break;
-        //            }
-
-        //            if (succeeded)
-        //            {
-        //                return Ok("Updated Successfully");
-        //            }
-        //            else
-        //            {
-        //                return BadRequest("No properties matched, or no properties updated");
-        //            }
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            return Problem(e.Message, statusCode: 500);
-        //        }
-        //    }
-        //    #endregion
     }
     #endregion
 }

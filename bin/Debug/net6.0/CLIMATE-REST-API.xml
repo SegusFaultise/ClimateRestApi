@@ -107,18 +107,6 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:CLIMATE_REST_API.Controllers.UserController.PatchUsers(System.String,System.String,System.String,System.DateTime,System.DateTime)">
-            <summary>
-            Updates user emails and roles based on a date range
-            can only be performed by an admin
-            </summary>
-            <param name="api_token"></param>
-            <param name="email"></param>
-            <param name="role"></param>
-            <param name="start_date"></param>
-            <param name="end_date"></param>
-            <returns></returns>
-        </member>
         <member name="T:CLIMATE_REST_API.Models.SensorDataModel">
             <summary>
             Sensor data model
