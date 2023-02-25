@@ -170,7 +170,7 @@ namespace CLIMATE_REST_API.Controllers
 
                 else
                 {
-                    await _mongodbServices.PatchUsersRoleAsync(operation.path, operation.value, date_time_start, date_time_end);
+                    await _mongodbServices.PatchUsersRoleAsync(operation.path = "role", operation.value, date_time_start, date_time_end);
                     return Ok("Users roles have been updated");
                 }
             }
