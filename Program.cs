@@ -24,7 +24,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Version = "v1.0",
         Title= "Sensor Data API",
-        Description = "An edcucational api for interfacing with sensor data from IOT devices."
+        Description = "An edcucational api for interfacing with sensor data from IOT devices using mongoDB and C#.."
     });
 
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
