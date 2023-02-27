@@ -1,5 +1,5 @@
 # CLIMATE-REST-API
-An edcucational api for interfacing with sensor data from IOT devices using mongoDB and C#.
+An edcucational API for interfacing with sensor data from IOT devices using mongoDB and C#.
 
 # WHAT I LEARNED
 * mongoDB
