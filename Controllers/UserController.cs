@@ -22,9 +22,11 @@ namespace CLIMATE_REST_API.Controllers
         #endregion
 
         #region Setting _mongodbServices To mongodbServices
-        public UserController(MongoDBServices mongodbServices)
+        public UserController(
+        MongoDBServices mongodbServices)
         {
-            _mongodbServices = mongodbServices;
+            _mongodbServices =
+            mongodbServices;
         }
         #endregion
 
@@ -48,16 +50,25 @@ namespace CLIMATE_REST_API.Controllers
         /// <param name="api_token"></param>
         /// <param name="role"></param>
         /// <returns></returns>
-        private async Task<bool> AuthenticateUser(string api_token, string role)
+        private async Task<bool> AuthenticateUser(
+        string api_token,
+        string role)
         {
-            var auth = await _mongodbServices.AuthenticateUserAsync(api_token, role);
+            var auth =
+            await _mongodbServices.AuthenticateUserAsync(
+            api_token,
+            role);
 
-            if (auth == null)
+            if (
+            auth ==
+            null)
             {
                 return false;
             }
 
-            await _mongodbServices.UpdateUserLoginTimeAsync(api_token, DateTime.Now);
+            await _mongodbServices.UpdateUserLoginTimeAsync(
+            api_token,
+            DateTime.Now);
 
             return true;
         }
@@ -73,18 +84,30 @@ namespace CLIMATE_REST_API.Controllers
         [EnableCors]
         [HttpPost]
         [Route("{api_token} PostUser")]
-        public async Task<IActionResult> CreateUser([FromBody] UserModel user_model, string api_token)
+        public async Task<IActionResult> CreateUser(
+        [FromBody]
+        UserModel user_model,
+        string api_token)
         {
-            if (AuthenticateUser(api_token, "Admin").Result == false)
+            if (
+            AuthenticateUser(
+            api_token,
+            "Admin").Result ==
+            false)
             {
-                return Unauthorized("Unauthorized");
+                return Unauthorized(
+                "Unauthorized");
             }
 
-            await _mongodbServices.CreatedUserAsync(user_model);
+            await _mongodbServices.CreatedUserAsync(
+            user_model);
 
-            return CreatedAtAction(nameof(GetAllUsers),
-                new { id = user_model.Id },
-                user_model); ;
+            return CreatedAtAction(
+            nameof(GetAllUsers),
+            new { 
+            id = 
+            user_model.Id },
+            user_model); ;
         }
         #endregion
 
@@ -97,17 +120,28 @@ namespace CLIMATE_REST_API.Controllers
         /// <returns></returns>
         [EnableCors]
         [HttpDelete]
-        [Route("{id} {api_token} DeleteUser")]
-        public async Task<IActionResult> DeleteUserById(string api_token, string id)
+        [Route(
+        @"{id} {api_token} DeleteUser")]
+        public async Task<IActionResult> DeleteUserById(
+        string api_token,
+        string id)
         {
-            if (AuthenticateUser(api_token, "Admin").Result == false)
+            if (
+            AuthenticateUser(
+            api_token,
+            "Admin").Result ==
+            false)
             {
-                return Unauthorized("Unauthorized");
+                return Unauthorized(
+                "Unauthorized");
             }
 
-            await _mongodbServices.DeleteUserByIdAsync(api_token, id);
+            await _mongodbServices.DeleteUserByIdAsync(
+            api_token,
+            id);
 
-            return Ok("User deleted");
+            return Ok(
+            "User deleted");
         }
         #endregion
 
@@ -121,17 +155,30 @@ namespace CLIMATE_REST_API.Controllers
         /// <returns></returns>
         [EnableCors]
         [HttpDelete]
-        [Route("{api_token} {date_time_start} {date_time_end} DeleteManyUsers")]
-        public async Task<IActionResult> DeleteManyUsers(string api_token, DateTime date_time_start, DateTime date_time_end)
+        [Route(@"{api_token} {date_time_start}
+        {date_time_end} DeleteManyUsers")]
+        public async Task<IActionResult> DeleteManyUsers(
+        string api_token,
+        DateTime date_time_start,
+        DateTime date_time_end)
         {
-            if (AuthenticateUser(api_token, "Admin").Result == false)
+            if (
+            AuthenticateUser(
+            api_token,
+            "Admin").Result ==
+            false)
             {
-                return Unauthorized("Unauthorized");
+                return Unauthorized(
+                "Unauthorized");
             }
 
-            await _mongodbServices.DeletesManyUsersAsync(api_token, date_time_start, date_time_end);
+            await _mongodbServices.DeletesManyUsersAsync(
+            api_token,
+            date_time_start,
+            date_time_end);
 
-            return Ok("Users deleted");
+            return Ok(
+            "Users deleted");
         }
         #endregion
 
@@ -146,37 +193,66 @@ namespace CLIMATE_REST_API.Controllers
         /// <returns></returns>
         [EnableCors]
         [HttpPatch]
-        [Route("{api_token} {date_time_start} {date_time_end} PatchUsers")]
-        public async Task<IActionResult> UpdateUsersAsync([FromBody] JsonPatchDocument<List<UserModel>> patch_model, DateTime date_time_start, DateTime date_time_end, string api_token)
+        [Route(@"{api_token} {date_time_start}
+        {date_time_end} PatchUsers")]
+        public async Task<IActionResult> UpdateUsersAsync(
+        [FromBody] 
+        JsonPatchDocument<List<UserModel>> patch_model,
+        DateTime date_time_start,
+        DateTime date_time_end,
+        string api_token)
         {
-            var operation = patch_model.Operations.FirstOrDefault();
+            var operation =
+            patch_model.Operations.FirstOrDefault();
 
             try
             {
-                if (patch_model == null)
+                if (
+                patch_model ==
+                null)
                 {
                     return BadRequest();
                 }
 
-                if (AuthenticateUser(api_token, "Admin").Result == false)
+                if (
+                AuthenticateUser(
+                api_token,
+                "Admin").Result ==
+                false)
                 {
-                    return Unauthorized("Unauthorized");
+                    return Unauthorized(
+                    "Unauthorized");
                 }
 
-                if (date_time_start > date_time_end || date_time_end < date_time_start)
+                if (
+                date_time_start >
+                date_time_end ||
+                date_time_end <
+                date_time_start)
                 {
-                    return BadRequest("Do you have a time travel machine?");
+                    return BadRequest(
+                    "Do you have a time travel machine?");
                 }
 
                 else
                 {
-                    await _mongodbServices.PatchUsersRoleAsync(operation.path = "role", operation.value, date_time_start, date_time_end);
-                    return Ok("Users roles have been updated");
+                    await _mongodbServices.PatchUsersRoleAsync(
+                    operation.path =
+                    "role",
+                    operation.value,
+                    date_time_start,
+                    date_time_end);
+
+                    return Ok(
+                    "Users roles have been updated");
                 }
             }
-            catch (Exception e)
+            catch (
+            Exception e)
             {
-                return Problem(e.Message, statusCode: 500);
+                return Problem(
+                e.Message,
+                statusCode: 500);
             }
         }
         #endregion

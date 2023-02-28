@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CLIMATE-REST-API</name>
+    </assembly>
+    <members>
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.AuthenticateUser(System.String,System.String)">
+            <summary>
+            Authenticates the user to allow certian actions
+            </summary>
+            <param name="api_token"></param>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.GetAllSensors">
+            <summary>
+            Gets all sensor readings [Limited to 100 readings due to swagger not being able to load in more then 5000 records]
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.GetSensorById(System.String)">
+            <summary>
+            Gets a sensor reading by id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.GetMaxPrecipitation(System.String)">
+            <summary>
+            Gets the max precipitation of a single sensor
+            </summary>
+            <param name="device"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.GetFieldsBasedOnTimeAndDate(System.String,System.DateTime)">
+            <summary>
+            Gets fields based on time and date
+            </summary>
+            <param name="device"></param>
+            <param name="date_time"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.GetMaxTemp(System.DateTime,System.DateTime)">
+            <summary>
+            Gets max tempreture based on a time range
+            </summary>
+            <param name="date_time_start"></param>
+            <param name="date_time_end"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.PostSingleSensorAsync(CLIMATE_REST_API.Models.SensorDataModel)">
+            <summary>
+            Post new sensor reading
+            </summary>
+            <param name="sensor_model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.PostMannyWeatherAsync(System.Collections.Generic.List{CLIMATE_REST_API.Models.SensorDataModel})">
+            <summary>
+            Post manny sensor readings
+            </summary>
+            <param name="sensor_model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_DATA_BRAZIL.Controllers.SensorController.UpdatePrecipitationAsync(System.String,System.Double,System.String)">
+            <summary>
+            Updates precipitation based on the id
+            </summary>
+            <param name="id"></param>
+            <param name="precipitation_mm_h"></param>
+            <param name="api_token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_REST_API.Controllers.TeaPotController.ImATeaPot">
+            <summary>
+            I am the tea pot and the tea pot is me
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_REST_API.Controllers.UserController.GetAllUsers">
+            <summary>
+            Gets all the user from the database
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_REST_API.Controllers.UserController.AuthenticateUser(System.String,System.String)">
+            <summary>
+            Authenticates the user to allow certian actions
+            </summary>
+            <param name="api_token"></param>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_REST_API.Controllers.UserController.CreateUser(CLIMATE_REST_API.Models.UserModel,System.String)">
+            <summary>
+            Creates a single user and can only be performed by an admin
+            </summary>
+            <param name="user_model"></param>
+            <param name="api_token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_REST_API.Controllers.UserController.DeleteUserById(System.String,System.String)">
+            <summary>
+            Deletes the user by id and can only be performed by an admin
+            </summary>
+            <param name="api_token"></param>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_REST_API.Controllers.UserController.DeleteManyUsers(System.String,System.DateTime,System.DateTime)">
+            <summary>
+            Deletes users if they havent logedin for 30 days can only be performed by an admin
+            </summary>
+            <param name="api_token"></param>
+            <param name="date_time_start"></param>
+            <param name="date_time_end"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CLIMATE_REST_API.Controllers.UserController.UpdateUsersAsync(Microsoft.AspNetCore.JsonPatch.JsonPatchDocument{System.Collections.Generic.List{CLIMATE_REST_API.Models.UserModel}},System.DateTime,System.DateTime,System.String)">
+            <summary>
+            Updates a users role based on a date range in which they were created
+            </summary>
+            <param name="patch_model"></param>
+            <param name="date_time_start"></param>
+            <param name="date_time_end"></param>
+            <param name="api_token"></param>
+            <returns></returns>
+        </member>
+        <member name="T:CLIMATE_REST_API.Models.SensorDataModel">
+            <summary>
+            Sensor data model
+            </summary>
+        </member>
+    </members>
+</doc>

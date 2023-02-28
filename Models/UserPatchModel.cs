@@ -2,8 +2,13 @@
 {
     public class UserPatchModel
     {
-        public UserFilter Filter { get; set; }
-        public string PropertyName { get; set; }
-        public string PropertyValue { get; set; }
+        public UserFilter Filter 
+        { get; set; }
+
+        public string PropertyName 
+        { get; set; }
+
+        public string PropertyValue 
+        { get; set; }
     }
 }

@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\CLIMATE-REST-API.props" />
+</Project>

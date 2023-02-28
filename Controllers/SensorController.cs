@@ -25,9 +25,12 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         #endregion
 
         #region Setting _mongodbServices To mongodbServices
-        public SensorController(MongoDBServices mongodbServices)
+        public SensorController(
+        MongoDBServices 
+        mongodbServices)
         {
-            _mongodbServices = mongodbServices;
+            _mongodbServices =
+            mongodbServices;
         }
         #endregion
 
@@ -38,16 +41,26 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         /// <param name="api_token"></param>
         /// <param name="role"></param>
         /// <returns></returns>
-        private async Task<bool> AuthenticateUser(string api_token, string role)
+        private async Task<bool> AuthenticateUser(
+        string api_token, 
+        string role)
         {
-            var auth = await _mongodbServices.AuthenticateUserAsync(api_token, role);
+            var authenticate = 
+            await _mongodbServices.AuthenticateUserAsync(
+            api_token,
+            role);
 
-            if (auth == null)
+            if (
+            authenticate ==
+            null)
             {
                 return false;
             }
 
-            await _mongodbServices.UpdateUserLoginTimeAsync(api_token, DateTime.Now);
+            await _mongodbServices.UpdateUserLoginTimeAsync(
+            api_token,
+            DateTime.Now);
+
             return true;
         }
         #endregion
@@ -75,9 +88,11 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         [EnableCors]
         [HttpGet]
         [Route("GetSesnorById")]
-        public async Task<SensorDataModel> GetSensorById(string id)
+        public async Task<SensorDataModel> GetSensorById(
+        string id)
         {
-           return await _mongodbServices.GetSensorByIdAsync(id);
+           return await _mongodbServices.GetSensorByIdAsync(
+           id);
         }
         #endregion
 
@@ -90,30 +105,41 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         [EnableCors]
         [HttpGet]
         [Route("GetMaxPrecipitation")]
-        public async Task<IActionResult> GetMaxPrecipitation(string device)
+        public async Task<IActionResult> GetMaxPrecipitation(
+        string device)
         {
             try
             {
-                var result = await _mongodbServices.GetMaxPrecipitaionAsync(device);
+                var result =
+                await _mongodbServices.GetMaxPrecipitaionAsync(
+                device);
 
-                if(result == null)
+                if(
+                result ==
+                null)
                 {
-                    return BadRequest("No entry found");
+                    return BadRequest(
+                    "No entry found");
                 }
 
-                if (device == null)
+                if (
+                device ==
+                null)
                 {
-                    return BadRequest("Please fill in the device field");
+                    return BadRequest(
+                    "Please fill in the device field");
                 }
 
                 else
                 {
-                    return Ok(result);
+                    return Ok(
+                    result);
                 }
             }
             catch
             {
-                return BadRequest("No entry found");
+                return BadRequest(
+                "No entry found");
             }
         }
         #endregion
@@ -128,25 +154,37 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         [EnableCors()]
         [HttpGet]
         [Route("GetFieldsBasedOnTimeAndDate")]
-        public async Task<IActionResult> GetFieldsBasedOnTimeAndDate(string device, DateTime date_time)
+        public async Task<IActionResult> GetFieldsBasedOnTimeAndDate(
+        string device,
+        DateTime date_time)
         {
             try
             {
-                var result = await _mongodbServices.GetFieldsBasedOnTimeAndDateAsync(device, date_time);
+                var result =
+                await _mongodbServices.GetFieldsBasedOnTimeAndDateAsync(
+                device,
+                date_time);
 
-                if (result == null)
+                if (
+                result ==
+                null)
                 {
-                    return BadRequest("No entry found");
+                    return BadRequest(
+                    "No entry found");
                 }
 
-                if (device == null)
+                if (
+                device ==
+                null)
                 {
-                    return BadRequest("Please fill in the device field");
+                    return BadRequest(
+                    "Please fill in the device field");
                 }
 
                 else
                 {
-                    return Ok(result);
+                    return Ok(
+                    result);
                 }
             }
             catch
@@ -166,25 +204,39 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         [EnableCors]
         [HttpGet]
         [Route("GetMaxTemp")]
-        public async Task<IActionResult> GetMaxTemp(DateTime date_time_start, DateTime date_time_end)
+        public async Task<IActionResult> GetMaxTemp(
+        DateTime date_time_start,
+        DateTime date_time_end)
         {
             try
             {
-                var result = await _mongodbServices.GetMaxTempAsync(date_time_start, date_time_end);
+                var result =
+                await _mongodbServices.GetMaxTempAsync(
+                date_time_start,
+                date_time_end);
 
-                if (result == null)
+                if (
+                result ==
+                null)
                 {
-                    return BadRequest("No entry found");
+                    return BadRequest(
+                    "No entry found");
                 }
 
-                if (date_time_start > date_time_end || date_time_end < date_time_start)
+                if (
+                date_time_start >
+                date_time_end || 
+                date_time_end < 
+                date_time_start)
                 {
-                    return BadRequest("Do you have a time travel machine?");
+                    return BadRequest(
+                    "Do you have a time travel machine?");
                 }
 
                 else
                 {
-                    return Ok(result);
+                    return Ok(
+                    result);
                 }
             }
             catch
@@ -198,40 +250,51 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         /// <summary>
         /// Post new sensor reading
         /// </summary>
-        /// <param name="weather_model"></param>
+        /// <param name="sensor_model"></param>
         /// <returns></returns>
         [EnableCors]
         [HttpPost]
         [Route("PostSingleSensor")]
-        public async Task<IActionResult> PostSingleSensorAsync([FromBody] SensorDataModel weather_model)
+        public async Task<IActionResult> PostSingleSensorAsync(
+        [FromBody] 
+        SensorDataModel sensor_model)
         {
             try
             {
-                if (weather_model.Humidity_percentage + 
-                    weather_model.Longitude + 
-                    weather_model.Latitude + 
-                    weather_model.Precipitation_mm_h + 
-                    weather_model.WindDirection +
-                    weather_model.AtmosphericPressure_kPa +
-                    weather_model.Temperature_C + 
-                    weather_model.SolarRadiation_Wm2 +
-                    weather_model.MaxWindSpeed_ms == 0)
+                if (
+                sensor_model.Humidity_percentage + 
+                sensor_model.Longitude + 
+                sensor_model.Latitude + 
+                sensor_model.Precipitation_mm_h + 
+                sensor_model.WindDirection +
+                sensor_model.AtmosphericPressure_kPa +
+                sensor_model.Temperature_C + 
+                sensor_model.SolarRadiation_Wm2 +
+                sensor_model.MaxWindSpeed_ms == 0)
                 {
-                    return BadRequest("Please fill in the fields");
+                    return BadRequest(
+                    "Please fill in the fields");
                 }
 
-                if (weather_model.Device == "")
+                if (
+                sensor_model.Device ==
+                "")
                 {
-                    return BadRequest("Please fill in the fields");
+                    return BadRequest(
+                    "Please fill in the fields");
                 }
 
                 else
                 {
-                    await _mongodbServices.CreateWeatherAsync(weather_model);
+                    await _mongodbServices.CreateWeatherAsync(
+                    sensor_model);
 
-                    return CreatedAtAction(nameof(GetAllSensors), 
-                        new { id = weather_model.Id },
-                        weather_model);
+                    return CreatedAtAction(
+                    nameof(GetAllSensors), 
+                    new { 
+                    id = 
+                    sensor_model.Id },
+                    sensor_model);
                 }
             }
             catch
@@ -245,26 +308,34 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         /// <summary>
         /// Post manny sensor readings
         /// </summary>
-        /// <param name="weather_model"></param>
+        /// <param name="sensor_model"></param>
         /// <returns></returns>
         [EnableCors]
         [HttpPost]
         [Route("PostMannyWeather")]
-        public async Task<IActionResult> PostMannyWeatherAsync([FromBody] List<SensorDataModel> weather_model)
+        public async Task<IActionResult> PostMannyWeatherAsync(
+        [FromBody]
+        List<SensorDataModel> sensor_model)
         {
             try
             {
-                if (Request.Body.Equals(0))
+                if (
+                Request.Body.Equals(0))
                 {
-                    return BadRequest("Please fill in the fields");
+                    return BadRequest(
+                    "Please fill in the fields");
                 }
                 else
                 {
-                    await _mongodbServices.CreateMannyWeatherAsync(weather_model);
+                    await _mongodbServices.CreateMannyWeatherAsync(
+                    sensor_model);
 
-                    return CreatedAtAction(nameof(GetAllSensors), 
-                        new { id = weather_model },
-                        weather_model);
+                    return CreatedAtAction(
+                    nameof(GetAllSensors), 
+                    new { 
+                    id =
+                    sensor_model },
+                    sensor_model);
                 }
             }
             catch
@@ -278,13 +349,17 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         [EnableCors]
         [HttpPost]
         [Route("PostWeatherToWebsite")]
-        public async Task<IActionResult> PostWeatherToWebisteAsync(SensorDataModel sensor_model)
+        public async Task<IActionResult> PostWeatherToWebisteAsync(
+        SensorDataModel sensor_model)
         {
-            await _mongodbServices.CreateWeatherAsync(sensor_model);
+            await _mongodbServices.CreateWeatherAsync(
+            sensor_model);
 
-            return CreatedAtAction(nameof(GetAllSensors), 
-                new { id = sensor_model.Id },
-                sensor_model);
+            return CreatedAtAction(
+            nameof(GetAllSensors), 
+            new { id = 
+            sensor_model.Id },
+            sensor_model);
         }
         #endregion
 
@@ -299,23 +374,37 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         [EnableCors]
         [HttpPut]
         [Route("{id} {api_token} UpdatePrecipitation")]
-        public async Task<IActionResult> UpdatePrecipitationAsync(string id, double precipitation_mm_h, string api_token)
+        public async Task<IActionResult> UpdatePrecipitationAsync(
+        string id, 
+        double precipitation_mm_h, 
+        string api_token)
         { 
             try
             {
-                if (AuthenticateUser(api_token, "Admin").Result == false)
+                if (
+                AuthenticateUser(
+                api_token,
+                "Admin").Result ==
+                false)
                 {
-                    return Unauthorized("Unauthorized");
+                    return Unauthorized(
+                    "Unauthorized");
                 }
                 
-                if (precipitation_mm_h == 0)
+                if (
+                precipitation_mm_h ==
+                0)
                 {
-                    return BadRequest("You must enter a value into the [precipitation] field");
+                    return BadRequest(
+                    "You must enter a value into the [precipitation] field");
                 }
 
-                await _mongodbServices.UpdatePrecipitaionAsync(id, precipitation_mm_h);
+                await _mongodbServices.UpdatePrecipitaionAsync(
+                id,
+                precipitation_mm_h);
 
-                return Ok("Precipitation updated");
+                return Ok(
+                "Precipitation updated");
             }
             catch
             {
