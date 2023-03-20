@@ -42,24 +42,20 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
         /// <param name="role"></param>
         /// <returns></returns>
         private async Task<bool> AuthenticateUser(
-        string api_token, 
-        string role)
+        string api_token, string role)
         {
             var authenticate = 
             await _mongodbServices.AuthenticateUserAsync(
-            api_token,
+            api_token, 
             role);
 
-            if (
-            authenticate ==
-            null)
+            if (authenticate == null)
             {
                 return false;
             }
 
             await _mongodbServices.UpdateUserLoginTimeAsync(
-            api_token,
-            DateTime.Now);
+            api_token, DateTime.Now);
 
             return true;
         }
@@ -272,8 +268,22 @@ namespace CLIMATE_DATA_BRAZIL.Controllers
                 sensor_model.SolarRadiation_Wm2 +
                 sensor_model.MaxWindSpeed_ms == 0)
                 {
-                    return BadRequest(
-                    "Please fill in the fields");
+                    return BadRequest("Please fill in the fields");
+                }
+
+                if (sensor_model.Humidity_percentage > 100)
+                {
+                    return BadRequest("Humidity cannot be higher then 100%");
+                }
+
+                if (sensor_model.Temperature_C > 60)
+                {
+                    return BadRequest("Temperature cannot be greater then 60 c");
+                }
+
+                if (sensor_model.Temperature_C < -50)
+                {
+                    return BadRequest("Temperature cannot be less then -50 c");
                 }
 
                 if (
