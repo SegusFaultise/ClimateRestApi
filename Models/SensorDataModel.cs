@@ -19,73 +19,58 @@ namespace CLIMATE_REST_API.Models
     public class SensorDataModel
     {
         [BsonId]
-        [BsonRepresentation(
-        BsonType
-        .ObjectId)]
+        [BsonRepresentation(BsonType.ObjectId)]
         [DefaultValue("")]
         public string? Id 
         { get; set; }
 
-        [BsonElement(
-        "Device Name")]
+        [BsonElement("Device Name")]
         [MaxLength(20)]
         [DefaultValue("")]
         public string Device 
-        { get; set; } = 
-        null!;
+        { get; set; } = null!;
 
-        [BsonElement(
-        "Precipitation mm/h")]
+        [BsonElement("Precipitation mm/h")]
         public double? Precipitation_mm_h 
         { get; set; }
 
-        [BsonElement(
-        "Time")]
+        [BsonElement("Time")]
         public DateTime Time 
         { get; set; }
 
-        [BsonElement(
-        "Latitude")]
+        [BsonElement("Latitude")]
         public double? Latitude 
         { get; set; }
 
-        [BsonElement(
-        "Longitude")]
+        [BsonElement("Longitude")]
         public double? Longitude 
         { get; set; }
 
-        [BsonElement(
-        "Temperature (°C)")]
+        [BsonElement("Temperature (°C)")]
         public double? Temperature_C 
         { get; set; }
 
-        [BsonElement(
-        "Atmospheric Pressure (kPa)")]
+        [BsonElement("Atmospheric Pressure (kPa)")]
         public double? AtmosphericPressure_kPa 
         { get; set; }
 
-        [BsonElement(
-        "Max Wind Speed (m/s)")]
+        [BsonElement("Max Wind Speed (m/s)")]
         public double? MaxWindSpeed_ms 
         { get; set; }
 
-        [BsonElement(
-        "Solar Radiation (W/m2)")]
+        [BsonElement("Solar Radiation (W/m2)")]
         public double? SolarRadiation_Wm2 
         { get; set; }
 
-        [BsonElement(
-        "Vapor Pressure (kPa)")]
+        [BsonElement("Vapor Pressure (kPa)")]
         public double? VaporPressure_kPa 
         { get; set; }
 
-        [BsonElement(
-        "Humidity (%)")]
+        [BsonElement("Humidity (%)")]
         public double? Humidity_percentage 
         { get; set; }
 
-        [BsonElement(
-        "Wind Direction (°)")]
+        [BsonElement("Wind Direction (°)")]
         public double? WindDirection 
         { get; set; }
     }

@@ -18,8 +18,7 @@ namespace CLIMATE_REST_API.Controllers
         public TeaPotController(
         MongoDBServices mongodbServices)
         {
-            _mongodbServices =
-            mongodbServices;
+            _mongodbServices = mongodbServices;
         }
         #endregion
 
@@ -32,9 +31,7 @@ namespace CLIMATE_REST_API.Controllers
         [Route("ImATeaPot")]
         public async Task<IActionResult> ImATeaPot()
         {
-            return Problem(
-            "Im a tea pot: 🫖",
-            statusCode: 418);
+            return Problem("Im a tea pot: 🫖", statusCode: 418);
         }
         #endregion
     }

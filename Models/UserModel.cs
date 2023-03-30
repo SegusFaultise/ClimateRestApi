@@ -7,47 +7,33 @@ namespace CLIMATE_REST_API.Models
     public class UserModel
     {
         [BsonId]
-        [BsonRepresentation(
-        BsonType
-        .ObjectId)]
+        [BsonRepresentation(BsonType.ObjectId)]
         [DefaultValue("")]
         public string? Id 
         { get; set; }
 
-        [BsonElement(
-        "user_email")]
+        [BsonElement("user_email")]
         public string UserEmail 
-        { get; set; } = 
-        null!;
+        { get; set; } = null!;
 
-        [BsonElement(
-        "user_password")]
+        [BsonElement("user_password")]
         public string? UserPassword 
-        { get; set; } = 
-        null!;
+        { get; set; } = null!;
 
-        [BsonElement(
-        "created_date")]
+        [BsonElement("created_date")]
         public DateTime? CreatedDate 
-        { get; set; } = 
-        null!;
+        { get; set; } = null!;
 
-        [BsonElement(
-        "role")]
+        [BsonElement("role")]
         public string Role 
-        { get; set; } = 
-        null!;
+        { get; set; } = null!;
 
-        [BsonElement(
-        "login_date")]
+        [BsonElement("login_date")]
         public DateTime? LoginDate 
-        { get; set; } = 
-        null!;
+        { get; set; } = null!;
 
-        [BsonElement(
-        "api_token")]
+        [BsonElement("api_token")]
         public string ApiToken 
-        { get; set; } = 
-        null!;
+        { get; set; } = null!;
     }
 }
